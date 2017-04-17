@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="QZt-XM-U2D">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QZt-XM-U2D" id="RNp-Sd-gto">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No recoard found......" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7x-s5-raD">
+                        <rect key="frame" x="30" y="23" width="260" height="33"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Y7x-s5-raD" firstAttribute="top" secondItem="RNp-Sd-gto" secondAttribute="topMargin" constant="15" id="GSC-KL-qIF"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Y7x-s5-raD" secondAttribute="bottom" constant="15" id="IiY-9x-0Li"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Y7x-s5-raD" secondAttribute="trailing" constant="22" id="r3n-Y7-mLT"/>
+                    <constraint firstItem="Y7x-s5-raD" firstAttribute="leading" secondItem="RNp-Sd-gto" secondAttribute="leadingMargin" constant="22" id="xrT-rJ-nCJ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="-31.5" y="-106"/>
+        </tableViewCell>
+    </objects>
+</document>

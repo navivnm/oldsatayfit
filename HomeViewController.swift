@@ -16,17 +16,19 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var tbleViewHome: UITableView!
     @IBOutlet weak var imgUser: UIImageView!
+    @IBOutlet weak var txtName: UITextField!
+    @IBOutlet weak var buttonToday: UIButton!
+    @IBOutlet weak var viewToday: UIView!
     
     var dataArray = [NSManagedObject]()
-    
-    var a = ["a","b","c"]
     var nameArray = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        loadDb()
+        //loadDb()
+        viewToday.isHidden = true
         view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
         tbleViewHome.alpha = 0.7
         //tbleViewHome.backgroundColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1.0)
@@ -57,8 +59,16 @@ class HomeViewController: UIViewController {
     }
     
     func loadDb(){
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let saveDate = dateFormatter.string(from: date)
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
+        let predicate = NSPredicate(format: "date == %@", saveDate)
+        fetchRequest.predicate = predicate
+        
         do{
             dataArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
         }catch{
@@ -68,6 +78,7 @@ class HomeViewController: UIViewController {
         for i in dataArray{
             nameArray.append(i.value(forKey: "name") as! String)
         }
+        tbleViewHome.reloadData()
     }
     
     /*func addCircleView() {
@@ -85,12 +96,103 @@ class HomeViewController: UIViewController {
         // Animate the drawing of the circle over the course of 1 second
         circleView.animateCircle(duration: 1.0)
     }*/
-    
+    override func viewWillAppear(_ animated: Bool) {
+        print("home")
+        nameArray = []
+        loadDb()
+        tbleViewHome.reloadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    /////////btn show/hide view
+    @IBAction func addToday(_ sender: Any) {
+        if viewToday.isHidden == true {
+            viewToday.isHidden = false
+        }else{
+            viewToday.isHidden = true
+        }
+    }
+    
+    @IBAction func removeToday(_ sender: Any) {
+        dataArray = []
+        nameArray = []
+        loadDb()
+        viewToday.isHidden = true
+    }
+    
+    ////////////////////////////save to coredata///////////////////////////////////////////
+    
+    @IBAction func buttonSave(_ sender: Any) {
+        print(txtName.text!)
+        
+        if (txtName.text?.characters.count)! > 0{
+            let datee = Date()
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.year, .month, .day], from: datee)
+            
+            //let year =  components.year
+            //let month = components.month
+            let day = components.day
+
+            //print(year!)
+            //print(month!)
+            print(day!)
+            print("hiiii")
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            let saveDate = dateFormatter.string(from: date)
+            
+            dateFormatter.dateFormat = "dd"
+            let saveDay = dateFormatter.string(from: date)
+            print("aaabbbbbbbbb", saveDay,saveDate)
+                
+            dateFormatter.dateFormat = "MM"
+            let saveMonth = dateFormatter.string(from: date)
+            print("aabbbbbbbbb", saveMonth)
+                
+            dateFormatter.dateFormat = "yyyy"
+            let saveYear = dateFormatter.string(from: date)
+            print("aabbbbbbbbb", saveYear)
+            
+            /*print("dayyyy 11",calendar.component(.day, from: date))
+            print("dayyyy 11",calendar.component(.month, from: date))
+            print("dayyyy 11",calendar.component(.year, from: date))*/
+            /*if countFlag == false{
+                count = testDb.count + 1
+                countFlag = true
+            }else{
+                count = count+1
+            }*/
+            
+            let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
+            let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
+            object.setValue(txtName.text, forKey: "name")
+            object.setValue(day, forKey: "number")
+            object.setValue(saveDate, forKey: "date")
+            object.setValue(saveDay, forKey: "saveday")
+            object.setValue(saveMonth, forKey: "savemonth")
+            object.setValue(saveYear, forKey: "saveyear")
+            
+            //print(count)
+            do{
+                try managedObjectContext?.save()
+            }catch{
+                print("save errorrr",error)
+            }
+        }/*else{
+            for i in num {
+                print("lll",i)
+            }
+        }*/
+        //calendar.reloadData()
+        //fetchFromDb()
+    }
     
     /*
     // MARK: - Navigation

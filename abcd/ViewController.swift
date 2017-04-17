@@ -13,8 +13,8 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     ////////////////////////////calendar
     
     @IBOutlet weak var calendar: FSCalendar!
-    
     @IBOutlet weak var calendarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tableData: UITableView!
     
     fileprivate var lunar: Bool = false {
         didSet {
@@ -75,24 +75,39 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     
     let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var testDb = [NSManagedObject]()
-    
+    var calenderDate = [NSManagedObject]()
     var num = [Int]()
-    var countFlag = false
-    var dateFlag = false
+    var nameArray = [String]()
+    var dateArray = [String]()
+    
+    //var countFlag = false
+    //var dateFlag = false
     var a = false
-    var count: Int = 0
+    var stopDB = false
+    
     var saveDate = String()
     var saveDay = String()
     var saveMonth = String()
     var saveYear = String()
     var startDate = String()
+    var dateTitle = String()
+    
     var newDate = Date()
+    //var count: Int = 0
     
     @IBOutlet weak var txtName: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        //tabBarController?.tabBar.isHidden = true
+        
+        var cellNib = UINib(nibName: TableViewNibCell.ViewControllerCell, bundle: nil)
+        tableData.register(cellNib, forCellReuseIdentifier: TableViewNibCell.ViewControllerCell)
+        
+        cellNib = UINib(nibName: TableViewNibCell.NothingFoundCell, bundle: nil)
+        tableData.register(cellNib, forCellReuseIdentifier: TableViewNibCell.NothingFoundCell)
+        
         //////////////////////calendar
         
         self.calendar.appearance.caseOptions = [.headerUsesUpperCase,.weekdayUsesUpperCase]
@@ -106,52 +121,59 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         
         ///////// bgcolor
         view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
-        //tbleViewHome.alpha = 0.7
-        calendar.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
+        tableData.alpha = 0.7
+        tableData.rowHeight = 80
+        calendar.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
         
-        fetchFromDb()
+        //fetchFromDb()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        stopDB = false
+        fetchFromDb()
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-
+    struct TableViewNibCell {
+        static let ViewControllerCell = "ViewControllerCell"
+        static let NothingFoundCell = "NothingFoundCell"
+    }
+    
     func fetchFromDb(){
         //////////////////////
         num = []
+        testDb = []
+        
         if startDate != "" {
             let dateString = startDate // change to your date format
-            //print("new start", startDate)
+            print("new start", startDate)
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"
-            
+            //dateFormatter.dateFormat = "dd/MM/yyyy"
             let dateee = dateFormatter.date(from: dateString)!
             print("new date",dateee)
             newDate = dateee
-            
-        }/*else{
-            print("///notnull/////////",startDate)
-        }*/
+        }
+        
         let dateFormatter = DateFormatter()
         let date = Date()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         
         let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: date)
         var startOfMonth = Calendar.current.date(from: comp)!
-        print("start of month11", startOfMonth/*, comp.day!,*/ ,startOfMonth,comp.year!)
+        let startDateLocal = dateFormatter.string(from: startOfMonth)
+        //print("start of month11", startOfMonth/*, comp.day!,*/ ,startOfMonth,comp.year!)
         
         if startDate != ""{
             startOfMonth = newDate
         }
-        let startDateLocal = dateFormatter.string(from: startOfMonth)
         
         //print("start date \(startDateLocal,dateFormatter.string(from: startOfMonth))")
-        
-        if startDate != "" {
-            //print("/////////656565",startDate)
-        }
         
         var comps2 = DateComponents()
         comps2.month = 1
@@ -164,8 +186,6 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         if startDate == ""{
             startDate = startDateLocal
             print("/////new////656565",startDate,endDate,startOfMonth)
-        }else{
-            print("/////////else",startDate,startDateLocal,endDate)
         }
         
         //////////////////////////////////
@@ -177,17 +197,17 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         
         dateFormatter.dateFormat = "dd"
         let b = dateFormatter.string(from: startOfMonth)
-        print("bbbbbbbbb", b)
+        //print("bbbbbbbbb", b)
         let bb = dateFormatter.string(from: endOfMonth)
-        print("endbbbbbbbbb", bb)
+        //print("endbbbbbbbbb", bb)
         
         dateFormatter.dateFormat = "MM"
         let c = dateFormatter.string(from: startOfMonth)
-        print("bbbbbbbbb", c)
+        //print("bbbbbbbbb", c)
         
         dateFormatter.dateFormat = "yyyy"
         let d = dateFormatter.string(from: startOfMonth)
-        print("bbbbbbbbb", d)
+        //print("bbbbbbbbb", d)
         
         let pred = NSPredicate(format: "((saveday >= %@) && (saveday <= %@)) && savemonth == %@ && saveyear == %@", b, bb, c, d)
         fetchRequest.predicate = pred
@@ -198,7 +218,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             
             for i in testDb {
                 //print("name \(i.value(forKey: "name")!)")
-                //print(i.value(forKey: "number")!)
+                print(i.value(forKey: "number")!)
                 //print(i.value(forKey: "date")!)
                 //print(i.value(forKey: "saveday")!)
                 //print(i.value(forKey: "savemonth")!)
@@ -214,8 +234,8 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         }catch{
             print(error)
         }
-        
        // [calendar.setNeedsDisplay()]
+        startDate = ""
         calendar.reloadData()
         print("after load", startDate,endDate,num.count)
     }
@@ -226,7 +246,48 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
         //return self.gregorian.isDateInToday(date) ? "今天" : nil
-        return self.gregorian.isDateInToday(date) ? "N" : nil
+        //print("cudaaaa",self.gregorian.date)
+       /* let oldDate = self.formatter.string(from: date)
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy/MM/dd"
+        let showDate = inputFormatter.date(from: oldDate)
+        inputFormatter.dateFormat = "dd-MM-yyyy"
+        let resultString = inputFormatter.string(from: showDate!)
+             print("-----/",resultString)*/
+        
+        //////////// coredata
+        if stopDB == false {
+            
+            print("load with current date")
+            stopDB = true
+            calenderDate = []
+            nameArray = []
+            dateArray = []
+                
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
+             
+            let predicate = NSPredicate(format: "date == %@", saveDate)
+            fetchRequest.predicate = predicate
+             
+            do {
+                calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
+            } catch {
+                print(error)
+            }
+             
+            for i in calenderDate{
+                nameArray.append(i.value(forKey: "name") as! String)
+                dateArray.append(i.value(forKey: "date") as! String)
+            }
+            tableData.reloadData()
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd"
+            dateTitle = dateFormatter.string(from: date)
+            print("aaabbbbbbbbb", dateTitle)
+        }
+        return self.gregorian.isDateInToday(date) ? dateTitle : nil
     }
     
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
@@ -241,15 +302,22 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         return self.formatter.date(from: "2017/10/30")!
     }
     
-    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        let day: Int! = self.gregorian.component(.day, from: date)
-        var a = day % 5 == 0 ? day/5 : 0;
-        //print("dayyyyy", a)
-        if a >= 2{
-            a = 1
+    /*func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        var day: Int! = self.gregorian.component(.day, from: date)
+        for i in num{
+            if day == i{
+            day = i
+            print("all",day, num.count)
+            }
         }
-        return a//day % 5 == 0 ? day/5 : 0;
-    }
+        //let a = day % 5 == 0 ? day/5 : 0;
+        //print("dayyyyy", day)
+        //let a = 3
+        /*if a >= 2{
+            a = 5
+        }*/
+        return day//day % 5 == 0 ? day/5 : 0;
+    }*/
     
     func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
         //var dateDot: Int = 0
@@ -282,69 +350,70 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             print("dayyyy 11",calendar.component(.month, from: date))
             print("dayyyy 11",calendar.component(.year, from: date))*/
         }
+        let imageName = "calenderunderline29"
         switch num.count {
         case 1:
-            return [num[0]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0]].contains(day) ? UIImage(named: imageName) : nil
         case 2:
-            return [num[0],num[1]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1]].contains(day) ? UIImage(named: imageName) : nil
         case 3:
-            return [num[0],num[1],num[2]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2]].contains(day) ? UIImage(named: imageName) : nil
         case 4:
-            return [num[0],num[1],num[2],num[3]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3]].contains(day) ? UIImage(named: imageName) : nil
         case 5:
-            return [num[0],num[1],num[2],num[3],num[4]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4]].contains(day) ? UIImage(named: imageName) : nil
         case 6:
-            return [num[0],num[1],num[2],num[3],num[4],num[5]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5]].contains(day) ? UIImage(named: imageName) : nil
         case 7:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6]].contains(day) ? UIImage(named: imageName) : nil
         case 8:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7]].contains(day) ? UIImage(named: imageName) : nil
         case 9:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8]].contains(day) ? UIImage(named: imageName) : nil
         case 10:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9]].contains(day) ? UIImage(named: imageName) : nil
         case 11:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10]].contains(day) ? UIImage(named: imageName) : nil
         case 12:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11]].contains(day) ? UIImage(named: imageName) : nil
         case 13:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12]].contains(day) ? UIImage(named: imageName) : nil
         case 14:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13]].contains(day) ? UIImage(named: imageName) : nil
         case 15:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14]].contains(day) ? UIImage(named: imageName) : nil
         case 16:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15]].contains(day) ? UIImage(named: imageName) : nil
         case 17:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16]].contains(day) ? UIImage(named: imageName) : nil
         case 18:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17]].contains(day) ? UIImage(named: imageName) : nil
         case 19:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18]].contains(day) ? UIImage(named: imageName) : nil
         case 20:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19]].contains(day) ? UIImage(named: imageName) : nil
         case 21:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20]].contains(day) ? UIImage(named: imageName) : nil
         case 22:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21]].contains(day) ? UIImage(named: imageName) : nil
         case 23:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22]].contains(day) ? UIImage(named: imageName) : nil
         case 24:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23]].contains(day) ? UIImage(named: imageName) : nil
         case 25:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24]].contains(day) ? UIImage(named: imageName) : nil
         case 26:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25]].contains(day) ? UIImage(named: imageName) : nil
         case 27:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26]].contains(day) ? UIImage(named: imageName) : nil
         case 28:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27]].contains(day) ? UIImage(named: imageName) : nil
         case 29:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28]].contains(day) ? UIImage(named: imageName) : nil
         case 30:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28],num[29]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28],num[29]].contains(day) ? UIImage(named: imageName) : nil
         case 31:
-            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28],num[29],num[30]].contains(day) ? UIImage(named: "icon_cat") : nil
+            return [num[0],num[1],num[2],num[3],num[4],num[5],num[6],num[7],num[8],num[9],num[10],num[11],num[12],num[13],num[14],num[15],num[16],num[17],num[18],num[19],num[20],num[21],num[22],num[23],num[24],num[25],num[26],num[27],num[28],num[29],num[30]].contains(day) ? UIImage(named: imageName) : nil
         default:
             break
         }
@@ -362,10 +431,42 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print("calendar did select date \(self.formatter.string(from: date))")
+        
+        //print("calendar did select date \(self.formatter.string(from: date))")
+        let oldDate = self.formatter.string(from: date)
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy/MM/dd"
+        let showDate = inputFormatter.date(from: oldDate)
+        inputFormatter.dateFormat = "dd-MM-yyyy"
+        let resultString = inputFormatter.string(from: showDate!)
+        print("*/*/*/*/*/*/",resultString)
+        
+        //////// coredata
+
+        calenderDate = []
+        nameArray = []
+        dateArray = []
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
+        
+        let predicate = NSPredicate(format: "date == %@", resultString)
+        fetchRequest.predicate = predicate
+        
+        do {
+            calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
+        } catch {
+            print(error)
+        }
+        
+        for i in calenderDate{
+            nameArray.append(i.value(forKey: "name") as! String)
+            dateArray.append(i.value(forKey: "date") as! String)
+        }
+        
         if monthPosition == .previous || monthPosition == .next {
             calendar.setCurrentPage(date, animated: true)
         }
+        tableData.reloadData()
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
@@ -375,7 +476,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     
     ///////////////////////////////////////////////////////////////////////
     
-    @IBAction func btnSave(_ sender: Any) {
+    /*@IBAction func btnSave(_ sender: Any) {
         print(txtName.text!)
         
         if (txtName.text?.characters.count)! > 0{
@@ -419,7 +520,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
                 print("lll",i)
             }
         }
-        calendar.reloadData()
+        //calendar.reloadData()
         //fetchFromDb()
     }
 
@@ -438,6 +539,39 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             }
         }catch{
             print("fetch error",error)
+        }
+    }*/
+}
+
+extension ViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ViewController: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if calenderDate.count > 0{
+            return calenderDate.count
+        }else{
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if calenderDate.count > 0{
+            //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ViewControllerCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.ViewControllerCell, for: indexPath) as! ViewControllerCell
+            //cell.textLabel?.text = nameArray[indexPath.row]
+            //cell.detailTextLabel?.text = dateArray[indexPath.row]
+            cell.lblCellDate.text = dateArray[indexPath.row]
+            cell.lblCellExercise.text = nameArray[indexPath.row]
+            return cell
+        }else if calenderDate.count == 0{
+            //let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell, for: ind)
+            return tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell)!
+        }else{
+            return UITableViewCell()
         }
     }
 }
