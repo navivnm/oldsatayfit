@@ -77,6 +77,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     var testDb = [NSManagedObject]()
     var calenderDate = [NSManagedObject]()
     var num = [Int]()
+    var aa = [Int]()
     var nameArray = [String]()
     var dateArray = [String]()
     
@@ -91,9 +92,10 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     var saveYear = String()
     var startDate = String()
     var dateTitle = String()
-    
+    var compareDate = String()
     var newDate = Date()
     //var count: Int = 0
+    let defaults = UserDefaults.standard
     
     @IBOutlet weak var txtName: UITextField!
     
@@ -101,7 +103,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //tabBarController?.tabBar.isHidden = true
-        
+        defaults.set("", forKey: "defaultDate")
         var cellNib = UINib(nibName: TableViewNibCell.ViewControllerCell, bundle: nil)
         tableData.register(cellNib, forCellReuseIdentifier: TableViewNibCell.ViewControllerCell)
         
@@ -130,6 +132,8 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         stopDB = false
+        compareDate = ""
+        //calendar.reloadData()
         fetchFromDb()
     }
     
@@ -144,10 +148,19 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         static let NothingFoundCell = "NothingFoundCell"
     }
     
+    //////////////////////
     func fetchFromDb(){
-        //////////////////////
         num = []
         testDb = []
+        
+        if let defaultdate = defaults.value(forKey: "defaultDate") as? String{
+            if defaultdate == ""{
+                print("ddd null",startDate)
+            }else{
+                print("ddd",defaultdate,startDate)
+                startDate = defaultdate
+            }
+        }
         
         if startDate != "" {
             let dateString = startDate // change to your date format
@@ -225,12 +238,19 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
                 //print(i.value(forKey: "saveyear")!)
                 
                 let a = i.value(forKey: "number")
+                
                 num.append(Int(a as! Int16))
                 //print("aaaa",num.count)
             }
+            
+            //////remove duplicate values from array
+            
+            num = Array(Set(num))
+            
             for i in num {
-                print("num", i)
+                print("nummmm", i)
             }
+            
         }catch{
             print(error)
         }
@@ -238,6 +258,37 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         startDate = ""
         calendar.reloadData()
         print("after load", startDate,endDate,num.count)
+    }
+    
+    func loadDb(){
+        print("load with current date")
+        stopDB = true
+        calenderDate = []
+        nameArray = []
+        dateArray = []
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
+        
+        let predicate = NSPredicate(format: "date == %@", saveDate)
+        fetchRequest.predicate = predicate
+        
+        do {
+            calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
+        } catch {
+            print(error)
+        }
+        
+        for i in calenderDate{
+            nameArray.append(i.value(forKey: "name") as! String)
+            dateArray.append(i.value(forKey: "date") as! String)
+        }
+        tableData.reloadData()
+        
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        dateTitle = dateFormatter.string(from: date)
+        print("aaabbbbbbbbb", dateTitle)
     }
     
     ///////////////////////////////calendar////////////////////////////////
@@ -350,7 +401,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             print("dayyyy 11",calendar.component(.month, from: date))
             print("dayyyy 11",calendar.component(.year, from: date))*/
         }
-        let imageName = "calenderunderline29"
+        let imageName = "line-29"
         switch num.count {
         case 1:
             return [num[0]].contains(day) ? UIImage(named: imageName) : nil
@@ -424,9 +475,32 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     // MARK:- FSCalendarDelegate
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-        print("change page to \(self.formatter.string(from: calendar.currentPage))")
+        //print("change page to \(self.formatter.string(from: calendar.currentPage))")
         a = false
         startDate = self.formatter.string(from: calendar.currentPage)
+        defaults.set(startDate, forKey: "defaultDate")
+        
+        let date = Date()
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy/MM"
+        let newDate = dateFormat.string(from: date)
+        
+        let oldDate = self.formatter.string(from: calendar.currentPage)
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy/MM/dd"
+        
+        let showDate = inputFormatter.date(from: oldDate)
+        inputFormatter.dateFormat = "yyyy/MM"
+        let resultString = inputFormatter.string(from: showDate!)
+        print("*/*/*/*/*/*/",resultString)
+        
+         print("change",resultString , newDate)
+        if resultString != newDate{
+            nameArray = []
+            tableData.reloadData()
+        }else{
+            loadDb()
+        }
         fetchFromDb()
     }
     
@@ -436,11 +510,13 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         let oldDate = self.formatter.string(from: date)
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy/MM/dd"
+        
         let showDate = inputFormatter.date(from: oldDate)
         inputFormatter.dateFormat = "dd-MM-yyyy"
         let resultString = inputFormatter.string(from: showDate!)
         print("*/*/*/*/*/*/",resultString)
         
+        compareDate = resultString
         //////// coredata
 
         calenderDate = []
@@ -550,16 +626,27 @@ extension ViewController: UITableViewDelegate{
 }
 
 extension ViewController: UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if compareDate == ""{
+            return "current" + saveDate
+        }else{
+            return "selected date " + compareDate
+        }
+    }
+    //////table row
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if calenderDate.count > 0{
-            return calenderDate.count
+        if nameArray.count > 0{
+            print("table",calenderDate.count,nameArray.count,num.count)
+            return nameArray.count
         }else{
             return 1
         }
     }
     
+    ////// table cell data
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if calenderDate.count > 0{
+        if nameArray.count > 0{
             //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ViewControllerCell
             let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.ViewControllerCell, for: indexPath) as! ViewControllerCell
             //cell.textLabel?.text = nameArray[indexPath.row]
@@ -567,11 +654,56 @@ extension ViewController: UITableViewDataSource{
             cell.lblCellDate.text = dateArray[indexPath.row]
             cell.lblCellExercise.text = nameArray[indexPath.row]
             return cell
-        }else if calenderDate.count == 0{
+        }else if nameArray.count == 0{
             //let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell, for: ind)
+            fetchFromDb()
             return tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell)!
         }else{
             return UITableViewCell()
+        }
+    }
+    
+    ///////table delete data
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if compareDate == ""{
+            let date = Date()
+            //let calendar = Calendar.current
+            let dateFormatter = DateFormatter()
+        
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            compareDate = dateFormatter.string(from: date)
+        }
+        print("cal",saveDate,compareDate)
+        
+        if calenderDate.count > 0 && compareDate == saveDate{
+            //print("true")
+            return true
+        }else{
+            //print("false")
+            return false
+        }
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            print("deleteee")
+            //nameArray.remove(at: indexPath.row)
+            //dateArray.remove(at: indexPath.row)
+            //tableData.deleteRows(at: [indexPath], with: .automatic)
+            nameArray.remove(at: indexPath.row)
+            //tableData.deleteRows(at: [indexPath], with: .automatic)
+            //tableData.reloadRows(at: [indexPath], with: .automatic)
+            
+            managedObjectContext?.delete(calenderDate[indexPath.row])
+            do{
+                try managedObjectContext?.save()
+                tableData.reloadData()
+                nameArray = []
+                loadDb()
+                //tableData.deleteRows(at: [indexPath], with: .automatic)
+            }catch{
+                print(error)
+            }
+                        //tableData.reloadData()
         }
     }
 }

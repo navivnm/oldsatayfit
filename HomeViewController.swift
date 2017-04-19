@@ -22,15 +22,28 @@ class HomeViewController: UIViewController {
     
     var dataArray = [NSManagedObject]()
     var nameArray = [String]()
-    
+    var dateArray = [String]()
+    var a = [1,2,3,4,5,2,4,1,4,3,6,5]
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
+        // Remove duplicates:
+        // first by converting to a Set
+        // and then back to Array
+        a = Array(Set(a))
+        
+        print("aaaaaaaa",a)
+        let cellNib = UINib(nibName: tableNib.NothingFound, bundle: nil)
+        tbleViewHome.register(cellNib, forCellReuseIdentifier: tableNib.NothingFound)
+        
         //loadDb()
         viewToday.isHidden = true
         view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
         tbleViewHome.alpha = 0.7
+        tbleViewHome.rowHeight = 80
         //tbleViewHome.backgroundColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1.0)
         print("loadddddd")
         /////////// create circle
@@ -58,6 +71,10 @@ class HomeViewController: UIViewController {
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: selectedColor], for: .selected)
     }
     
+    struct tableNib {
+        static let NothingFound = "NothingFoundCell"
+    }
+    
     func loadDb(){
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -77,6 +94,7 @@ class HomeViewController: UIViewController {
         
         for i in dataArray{
             nameArray.append(i.value(forKey: "name") as! String)
+            dateArray.append(i.value(forKey: "date") as! String)
         }
         tbleViewHome.reloadData()
     }
@@ -116,13 +134,13 @@ class HomeViewController: UIViewController {
         }
     }
     
+    
     @IBAction func removeToday(_ sender: Any) {
         dataArray = []
         nameArray = []
         loadDb()
         viewToday.isHidden = true
     }
-    
     ////////////////////////////save to coredata///////////////////////////////////////////
     
     @IBAction func buttonSave(_ sender: Any) {
@@ -136,7 +154,7 @@ class HomeViewController: UIViewController {
             //let year =  components.year
             //let month = components.month
             let day = components.day
-
+            
             //print(year!)
             //print(month!)
             print(day!)
@@ -151,24 +169,24 @@ class HomeViewController: UIViewController {
             dateFormatter.dateFormat = "dd"
             let saveDay = dateFormatter.string(from: date)
             print("aaabbbbbbbbb", saveDay,saveDate)
-                
+            
             dateFormatter.dateFormat = "MM"
             let saveMonth = dateFormatter.string(from: date)
             print("aabbbbbbbbb", saveMonth)
-                
+            
             dateFormatter.dateFormat = "yyyy"
             let saveYear = dateFormatter.string(from: date)
             print("aabbbbbbbbb", saveYear)
             
             /*print("dayyyy 11",calendar.component(.day, from: date))
-            print("dayyyy 11",calendar.component(.month, from: date))
-            print("dayyyy 11",calendar.component(.year, from: date))*/
+             print("dayyyy 11",calendar.component(.month, from: date))
+             print("dayyyy 11",calendar.component(.year, from: date))*/
             /*if countFlag == false{
-                count = testDb.count + 1
-                countFlag = true
-            }else{
-                count = count+1
-            }*/
+             count = testDb.count + 1
+             countFlag = true
+             }else{
+             count = count+1
+             }*/
             
             let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
             let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
@@ -186,10 +204,10 @@ class HomeViewController: UIViewController {
                 print("save errorrr",error)
             }
         }/*else{
-            for i in num {
-                print("lll",i)
-            }
-        }*/
+         for i in num {
+         print("lll",i)
+         }
+         }*/
         //calendar.reloadData()
         //fetchFromDb()
     }
@@ -213,14 +231,48 @@ extension HomeViewController: UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nameArray.count
+        if nameArray.count != 0{
+            return nameArray.count
+        }else{
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = nameArray[indexPath.row]
-        return cell
+        if nameArray.count != 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = nameArray[indexPath.row]
+            cell.detailTextLabel?.text = dateArray[indexPath.row]
+            return cell
+        }else if nameArray.count == 0{
+            return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
+        }else{
+            return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            
+            nameArray.remove(at: indexPath.row)
+            //tbleViewHome.reloadRows(at: [indexPath], with: .automatic)
+            
+            managedObjectContext?.delete(dataArray[indexPath.row])
+            do{
+                try managedObjectContext?.save()
+                tbleViewHome.reloadData()
+                nameArray = []
+                loadDb()
+            }catch{
+                print("delete errpr",error)
+            }
+            print("ok")
+        }
     }
 }
 
