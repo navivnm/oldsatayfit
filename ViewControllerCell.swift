@@ -12,6 +12,9 @@ class ViewControllerCell: UITableViewCell {
 
     @IBOutlet weak var lblCellDate: UILabel!
     @IBOutlet weak var lblCellExercise: UILabel!
+    @IBOutlet weak var lblCellRep: UILabel!
+    @IBOutlet weak var lblCellTime: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

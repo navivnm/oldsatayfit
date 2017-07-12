@@ -21,7 +21,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             self.calendar.reloadData()
         }
     }
-    fileprivate var theme: Int = 0 {
+    /*fileprivate var theme: Int = 0 {
         didSet {
             switch (theme) {
             case 0:
@@ -55,7 +55,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
                 break;
             }
         }
-    }
+    }*/
     
     fileprivate let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -65,10 +65,10 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     
     fileprivate let gregorian: NSCalendar! = NSCalendar(calendarIdentifier:NSCalendar.Identifier.gregorian)
     
-    fileprivate let datesWithCat = ["2015/05/05","2015/06/05","2015/07/05"]
+    //fileprivate let datesWithCat = ["2015/05/05","2015/06/05","2015/07/05"]
     
-    let lunarCalendar = NSCalendar(calendarIdentifier: .chinese)!
-    let lunarChars = ["1","100","200"]
+    //let lunarCalendar = NSCalendar(calendarIdentifier: .chinese)!
+    //let lunarChars = ["1","100","200"]
     
     ////////////////////////////////////
     
@@ -77,10 +77,13 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     var testDb = [NSManagedObject]()
     var calenderDate = [NSManagedObject]()
     var num = [Int]()
-    var aa = [Int]()
+    //var aa = [Int]()
+    
     var nameArray = [String]()
     var dateArray = [String]()
-    
+    var repArray = [Int]()
+    var hourArray = [Int]()
+    var minuteArray = [Int]()
     //var countFlag = false
     //var dateFlag = false
     var a = false
@@ -94,6 +97,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
     var dateTitle = String()
     var compareDate = String()
     var newDate = Date()
+    
     //var count: Int = 0
     let defaults = UserDefaults.standard
     
@@ -122,10 +126,10 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         self.calendar.accessibilityIdentifier = "calendar"
         
         ///////// bgcolor
-        view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
-        tableData.alpha = 0.7
+        //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
+        tableData.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
         tableData.rowHeight = 80
-        calendar.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
+        //calendar.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
         
         //fetchFromDb()
     }
@@ -266,6 +270,9 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         calenderDate = []
         nameArray = []
         dateArray = []
+        repArray = []
+        hourArray = []
+        minuteArray = []
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
         
@@ -281,6 +288,9 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         for i in calenderDate{
             nameArray.append(i.value(forKey: "name") as! String)
             dateArray.append(i.value(forKey: "date") as! String)
+            repArray.append(i.value(forKey: "repetition") as! Int)
+            hourArray.append(i.value(forKey: "hour") as! Int)
+            minuteArray.append(i.value(forKey: "minute") as! Int)
         }
         tableData.reloadData()
         
@@ -314,7 +324,10 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             calenderDate = []
             nameArray = []
             dateArray = []
-                
+            repArray = []
+            hourArray = []
+            minuteArray = []
+            
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
              
             let predicate = NSPredicate(format: "date == %@", saveDate)
@@ -329,6 +342,9 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             for i in calenderDate{
                 nameArray.append(i.value(forKey: "name") as! String)
                 dateArray.append(i.value(forKey: "date") as! String)
+                repArray.append(i.value(forKey: "repetition") as! Int)
+                hourArray.append(i.value(forKey: "hour") as! Int)
+                minuteArray.append(i.value(forKey: "minute") as! Int)
             }
             tableData.reloadData()
             
@@ -341,16 +357,16 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         return self.gregorian.isDateInToday(date) ? dateTitle : nil
     }
     
-    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+    /*func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
         guard self.lunar else {
             return nil
         }
         let day = self.lunarCalendar.component(.day, from: date)
         return self.lunarChars[day-1]
-    }
+    }*/
     
     func maximumDate(for calendar: FSCalendar) -> Date {
-        return self.formatter.date(from: "2017/10/30")!
+        return self.formatter.date(from: "2099/12/31")!
     }
     
     /*func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
@@ -503,7 +519,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         }
         fetchFromDb()
     }
-    
+
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         //print("calendar did select date \(self.formatter.string(from: date))")
@@ -511,18 +527,20 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy/MM/dd"
         
-        let showDate = inputFormatter.date(from: oldDate)
+        let showDate = inputFormatter.date(from: oldDate)!
         inputFormatter.dateFormat = "dd-MM-yyyy"
-        let resultString = inputFormatter.string(from: showDate!)
-        print("*/*/*/*/*/*/",resultString)
-        
+        let resultString = inputFormatter.string(from: showDate)
+        print("-----",resultString,showDate)
+        calendar.select(showDate)
         compareDate = resultString
         //////// coredata
 
         calenderDate = []
         nameArray = []
         dateArray = []
-        
+        repArray = []
+        hourArray = []
+        minuteArray = []
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
         
         let predicate = NSPredicate(format: "date == %@", resultString)
@@ -537,86 +555,28 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         for i in calenderDate{
             nameArray.append(i.value(forKey: "name") as! String)
             dateArray.append(i.value(forKey: "date") as! String)
+            repArray.append(i.value(forKey: "repetition") as! Int)
+            hourArray.append(i.value(forKey: "hour") as! Int)
+            minuteArray.append(i.value(forKey: "minute") as! Int)
         }
         
         if monthPosition == .previous || monthPosition == .next {
             calendar.setCurrentPage(date, animated: true)
         }
-        tableData.reloadData()
+       
+        let when = DispatchTime.now() + 0.1 // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            // Your code with delay
+            self.tableData.reloadData()
+        }
+        //let myTimer : Timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.myPerformeCode), userInfo: nil, repeats: false)
+        //tableData.reloadData()
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         self.calendarHeightConstraint.constant = bounds.height
         self.view.layoutIfNeeded()
     }
-    
-    ///////////////////////////////////////////////////////////////////////
-    
-    /*@IBAction func btnSave(_ sender: Any) {
-        print(txtName.text!)
-        
-        if (txtName.text?.characters.count)! > 0{
-            let date = Date()
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.year, .month, .day], from: date)
-            
-            //let year =  components.year
-            //let month = components.month
-            let day = components.day
-            
-            //print(year!)
-            //print(month!)
-            print(day!)
-            print("hiiii")
-            
-            if countFlag == false{
-                count = testDb.count + 1
-                countFlag = true
-            }else{
-                count = count+1
-            }
-            
-            let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
-            let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
-            object.setValue(txtName.text, forKey: "name")
-            object.setValue(day, forKey: "number")
-            object.setValue(saveDate, forKey: "date")
-            object.setValue(saveDay, forKey: "saveday")
-            object.setValue(saveMonth, forKey: "savemonth")
-            object.setValue(saveYear, forKey: "saveyear")
-
-            print(count)
-            do{
-                try managedObjectContext?.save()
-            }catch{
-                print("save errorrr",error)
-            }
-        }else{
-            for i in num {
-                print("lll",i)
-            }
-        }
-        //calendar.reloadData()
-        //fetchFromDb()
-    }
-
-    @IBAction func btnLoad(_ sender: Any) {
-        num = []
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
-        
-        do{
-            testDb = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
-            for i in testDb {
-                //print(i.value(forKey: "name")!)
-                print(i.value(forKey: "number")!)
-                let a = i.value(forKey: "number")
-                num.append(Int(a as! Int16))
-                print("number to be saved",a!)
-            }
-        }catch{
-            print("fetch error",error)
-        }
-    }*/
 }
 
 extension ViewController: UITableViewDelegate{
@@ -627,13 +587,13 @@ extension ViewController: UITableViewDelegate{
 
 extension ViewController: UITableViewDataSource{
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    /*func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if compareDate == ""{
             return "current" + saveDate
         }else{
             return "selected date " + compareDate
         }
-    }
+    }*/
     //////table row
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if nameArray.count > 0{
@@ -646,6 +606,7 @@ extension ViewController: UITableViewDataSource{
     
     ////// table cell data
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //print("ssss",sum)
         if nameArray.count > 0{
             //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ViewControllerCell
             let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.ViewControllerCell, for: indexPath) as! ViewControllerCell
@@ -653,6 +614,14 @@ extension ViewController: UITableViewDataSource{
             //cell.detailTextLabel?.text = dateArray[indexPath.row]
             cell.lblCellDate.text = dateArray[indexPath.row]
             cell.lblCellExercise.text = nameArray[indexPath.row]
+            cell.lblCellRep.text = String(repArray[indexPath.row])
+            var zero = ""
+            if minuteArray[indexPath.row] < 10 {
+                zero = "0"
+            }else{
+                zero = ""
+            }
+            cell.lblCellTime.text = "0" + String(hourArray[indexPath.row]) + ":" + zero + String(minuteArray[indexPath.row])
             return cell
         }else if nameArray.count == 0{
             //let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell, for: ind)

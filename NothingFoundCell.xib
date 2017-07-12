@@ -16,7 +16,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QZt-XM-U2D" id="RNp-Sd-gto">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No record found......" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7x-s5-raD">
@@ -26,6 +26,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                 <constraints>
                     <constraint firstItem="Y7x-s5-raD" firstAttribute="top" secondItem="RNp-Sd-gto" secondAttribute="topMargin" constant="15" id="GSC-KL-qIF"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Y7x-s5-raD" secondAttribute="bottom" constant="15" id="IiY-9x-0Li"/>
@@ -33,6 +34,7 @@
                     <constraint firstItem="Y7x-s5-raD" firstAttribute="leading" secondItem="RNp-Sd-gto" secondAttribute="leadingMargin" constant="22" id="xrT-rJ-nCJ"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="-31.5" y="-106"/>
         </tableViewCell>
     </objects>

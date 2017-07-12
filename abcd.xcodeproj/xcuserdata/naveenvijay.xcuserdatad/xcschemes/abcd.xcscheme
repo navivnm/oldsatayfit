@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6DD6CEF21E86ABC30085C862"
-               BuildableName = "abcd.app"
+               BuildableName = "Stay Fit.app"
                BlueprintName = "abcd"
                ReferencedContainer = "container:abcd.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DD6CEF21E86ABC30085C862"
-            BuildableName = "abcd.app"
+            BuildableName = "Stay Fit.app"
             BlueprintName = "abcd"
             ReferencedContainer = "container:abcd.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DD6CEF21E86ABC30085C862"
-            BuildableName = "abcd.app"
+            BuildableName = "Stay Fit.app"
             BlueprintName = "abcd"
             ReferencedContainer = "container:abcd.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DD6CEF21E86ABC30085C862"
-            BuildableName = "abcd.app"
+            BuildableName = "Stay Fit.app"
             BlueprintName = "abcd"
             ReferencedContainer = "container:abcd.xcodeproj">
          </BuildableReference>

@@ -2,13 +2,16 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Test" representedClassName="Test" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minute" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="number" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="number" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="repetition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="saveday" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="savemonth" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="saveyear" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Test" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Test" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>
