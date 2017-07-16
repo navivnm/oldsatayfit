@@ -128,7 +128,7 @@ class BmiViewController: UIViewController {
         //print("about...",bmi)
         if bmi < 18.5 {
             //print("underweight")
-            viewUnder.backgroundColor = UIColor.white
+            viewUnder.backgroundColor = UIColor.gray
             viewNormal.backgroundColor = UIColor.lightText
             viewOver.backgroundColor = UIColor.lightText
             viewObesityOne.backgroundColor = UIColor.lightText
@@ -137,34 +137,34 @@ class BmiViewController: UIViewController {
         }else if bmi >= 18.5 && bmi < 24.99{
             //print("normal")
             viewUnder.backgroundColor = UIColor.lightText
-            viewNormal.backgroundColor = UIColor.white
+            viewNormal.backgroundColor = UIColor.gray
             viewOver.backgroundColor = UIColor.lightText
             viewObesityOne.backgroundColor = UIColor.lightText
             viewObesityTwo.backgroundColor = UIColor.lightText
             viewMorbid.backgroundColor = UIColor.lightText
-        }else if bmi >= 25 && bmi < 29.99{
+        }else if bmi >= 24.99 && bmi < 29.99{
             //print("overweight")
             viewUnder.backgroundColor = UIColor.lightText
             viewNormal.backgroundColor = UIColor.lightText
-            viewOver.backgroundColor = UIColor.white
+            viewOver.backgroundColor = UIColor.gray
             viewObesityOne.backgroundColor = UIColor.lightText
             viewObesityTwo.backgroundColor = UIColor.lightText
             viewMorbid.backgroundColor = UIColor.lightText
-        }else if bmi >= 30 && bmi < 34.99{
+        }else if bmi >= 29.99 && bmi < 34.99{
             //print("Obesity (Class 1)")
             viewUnder.backgroundColor = UIColor.lightText
             viewNormal.backgroundColor = UIColor.lightText
             viewOver.backgroundColor = UIColor.lightText
-            viewObesityOne.backgroundColor = UIColor.white
+            viewObesityOne.backgroundColor = UIColor.gray
             viewObesityTwo.backgroundColor = UIColor.lightText
             viewMorbid.backgroundColor = UIColor.lightText
-        }else if bmi >= 35 && bmi < 39.99{
+        }else if bmi >= 34.99 && bmi < 39.99{
             //print("Obesity (Class 2)")
             viewUnder.backgroundColor = UIColor.lightText
             viewNormal.backgroundColor = UIColor.lightText
             viewOver.backgroundColor = UIColor.lightText
             viewObesityOne.backgroundColor = UIColor.lightText
-            viewObesityTwo.backgroundColor = UIColor.white
+            viewObesityTwo.backgroundColor = UIColor.gray
             viewMorbid.backgroundColor = UIColor.lightText
         }else{
             //print("Morbid Obesity")
@@ -173,7 +173,7 @@ class BmiViewController: UIViewController {
             viewOver.backgroundColor = UIColor.lightText
             viewObesityOne.backgroundColor = UIColor.lightText
             viewObesityTwo.backgroundColor = UIColor.lightText
-            viewMorbid.backgroundColor = UIColor.white
+            viewMorbid.backgroundColor = UIColor.gray
         }
     }
     /*

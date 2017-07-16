@@ -56,6 +56,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         // Remove duplicates:
         // first by converting to a Set
         // and then back to Array
+        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "exercise.jpg")!)
         self.btnClose.isEnabled = false
         self.btnClose.tintColor = .clear
         self.btnSave.isEnabled = false
@@ -99,19 +100,26 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         view.layer.addSublayer(shapeLayer)
         */
         title = "Home"
-        /////////tab bar text color
-        let unselectedColor   = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-        let selectedColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
 
-        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: unselectedColor], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: selectedColor], for: .selected)
+        /////////tab bar text color
+        //let unselectedColor   = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+        //let selectedColor = UIColor(red: 255/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+        
+        //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: unselectedColor], for: .normal)
+        //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: selectedColor], for: .selected)
     }
     
     struct tableNib {
         static let ViewControllerCell = "ViewControllerCell"
         static let NothingFound = "NothingFoundCell"
     }
-    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        // I added this line
+        UITabBar.appearance().tintColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
+        
+        return true
+    }
     func loadDb(){
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -394,34 +402,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         txtViewSets.isHidden = true
     }
     
-    /*@IBAction func removeToday(_ sender: Any) {
-        txtExerciseName.resignFirstResponder()
-        txtExerciseRep.resignFirstResponder()
-        txtHour.resignFirstResponder()
-        txtMinute.resignFirstResponder()
-        
-        dataArray = []
-        nameArray = []
-        dateArray = []
-        repArray = []
-        hourArray = []
-        minuteArray = []
-        
-        loadDb()
-        callGraphData()
-        
-        self.btnClose.isEnabled = false
-        self.btnClose.tintColor = .clear
-        self.btnSave.isEnabled = false
-        self.btnSave.tintColor = .clear
-        
-        viewToday.isHidden = true
-        txtExerciseName.text = ""
-        txtExerciseRep.text = ""
-        txtHour.text = ""
-        txtMinute.text = ""
-        txtViewSets.isHidden = true
-    }*/
+
     ////////////////////////////save to coredata///////////////////////////////////////////
     
     @IBAction func btnSave(_ sender: Any) {
@@ -439,10 +420,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     }else{
                         if let a = Int(txtMinute.text!){
                             if a <= 0 {
-                                let alert = UIAlertController(title: "ooops !", message: "enter minute 0-59", preferredStyle: .alert)
-                                let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                                alert.addAction(alertAction)
-                                self.present(alert, animated: true, completion: nil)
+                                alertView(message: "enter minute 0-59")
                                 return
                             }
                         }
@@ -462,10 +440,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 if temp >= 0 && temp < 100 {
                                     exerRep = temp
                                 }else{
-                                    let alert = UIAlertController(title: "oops!", message: "not in range", preferredStyle: .alert)
-                                    let action = UIAlertAction(title: "close", style: .default, handler: nil)
-                                    alert.addAction(action)
-                                    self.present(alert, animated: true, completion: nil)
+                                    alertView(message: "not in range")
                                     return
                                 }
                             }else{
@@ -527,196 +502,34 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             }
                         } else{
                             //print("minutee")
-                            let alert = UIAlertController(title: "ooops !", message: "enter minute 0-59", preferredStyle: .alert)
-                            let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                            alert.addAction(alertAction)
-                            self.present(alert, animated: true, completion: nil)
+                            alertView(message: "enter minute 0-59")
                         }
                     } else{
-                        let alert = UIAlertController(title: "ooops !", message: "add minute", preferredStyle: .alert)
-                        let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                        alert.addAction(alertAction)
-                        self.present(alert, animated: true, completion: nil)
+                        alertView(message: "add minute")
                     }
                 }else{
                     //print("hour")
-                    let alert = UIAlertController(title: "ooops !", message: "enter hour 1-3", preferredStyle: .alert)
-                    let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                    alert.addAction(alertAction)
-                    self.present(alert, animated: true, completion: nil)
-                    
+                    alertView(message: "enter hour 1-3")
                 }
             }else{
                 //txtHour.text = "0"
-                let alert = UIAlertController(title: "ooops !", message: "add hour", preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                alert.addAction(alertAction)
-                self.present(alert, animated: true, completion: nil)
+                alertView(message: "add hour")
             }
         }else{
-            print("enter exercise name")
-            let alert = UIAlertController(title: "ooops !", message: "enter exercise name", preferredStyle: .alert)
-            let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-            alert.addAction(alertAction)
-            self.present(alert, animated: true, completion: nil)
+            alertView(message: "enter exercise name")
         }
         //calendar.reloadData()
         //fetchFromDb()
     }
     
-  /*  @IBAction func buttonSave(_ sender: Any) {
-        print(txtExerciseName.text!)
-        
-        if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
-            if (Int(txtHour.text!) == nil){
-                   print("no int val")
-                txtHour.text = "0"
-            }
-            
-            if let hour = Int(txtHour.text!){
-                if hour >= 0 && hour < 4{
-                    
-                    if hour >= 1{
-                        txtMinute.text = "0"
-                    }else{
-                        if let a = Int(txtMinute.text!){
-                            if a <= 0 {
-                                let alert = UIAlertController(title: "ooops !", message: "enter minute 0-59", preferredStyle: .alert)
-                                let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                                alert.addAction(alertAction)
-                                self.present(alert, animated: true, completion: nil)
-                                return
-                            }
-                        }
-                    }
-                    
-                    if let minute = Int(txtMinute.text!){
-                    /*var minute = Int()
-                    if (Int(txtMinute.text!) == nil) && hour >= 1{
-                        minute = 0
-                    }else{
-                        let a = txtMinute.text
-                        minute = Int(a!)!
-                    }*/
-                        if minute >= 0 && minute < 60{
-                            var exerRep = Int()
-                            if let temp = Int(txtExerciseRep.text!){
-                                if temp >= 0 && temp < 100 {
-                                    exerRep = temp
-                                }else{
-                                    let alert = UIAlertController(title: "oops!", message: "not in range", preferredStyle: .alert)
-                                    let action = UIAlertAction(title: "ok", style: .default, handler: nil)
-                                    alert.addAction(action)
-                                    self.present(alert, animated: true, completion: nil)
-                                    return
-                                }
-                            }else{
-                                exerRep = 0
-                            }
-                            
-                            let datee = Date()
-                            let calendar = Calendar.current
-                            let components = calendar.dateComponents([.year, .month, .day], from: datee)
-            
-                            //let year =  components.year
-                            //let month = components.month
-                            let day = components.day
-
-                            //print(year!)
-                            //print(month!)
-                            print(day!)
-                            print("hiiii")
-            
-                            let date = Date()
-                            let dateFormatter = DateFormatter()
-            
-                            dateFormatter.dateFormat = "dd-MM-yyyy"
-                            let saveDate = dateFormatter.string(from: date)
-            
-                            dateFormatter.dateFormat = "dd"
-                            let saveDay = dateFormatter.string(from: date)
-                            print("aaabbbbbbbbb", saveDay,saveDate)
-            
-                            dateFormatter.dateFormat = "MM"
-                            let saveMonth = dateFormatter.string(from: date)
-                            print("aabbbbbbbbb", saveMonth)
-            
-                            dateFormatter.dateFormat = "yyyy"
-                            let saveYear = dateFormatter.string(from: date)
-                            print("aabbbbbbbbb", saveYear)
-                            
-                            let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
-                            let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
-                            object.setValue(txtExerciseName.text, forKey: "name")
-                            object.setValue(saveDate, forKey: "date")
-                            object.setValue(exerRep, forKey: "repetition")
-                            object.setValue(hour, forKey: "hour")
-                            object.setValue(minute, forKey: "minute")
-                            object.setValue(day, forKey: "number")
-                            object.setValue(saveDay, forKey: "saveday")
-                            object.setValue(saveMonth, forKey: "savemonth")
-                            object.setValue(saveYear, forKey: "saveyear")
-                            
-                            //print(count)
-                            do{
-                                try managedObjectContext?.save()
-                                print("SAVEEEDDDDDDD")
-                                txtExerciseName.resignFirstResponder()
-                                txtHour.resignFirstResponder()
-                                txtMinute.resignFirstResponder()
-                            }catch{
-                                print("save errorrr",error)
-                            }
-                        } else{
-                            //print("minutee")
-                            let alert = UIAlertController(title: "ooops !", message: "enter minute 0-59", preferredStyle: .alert)
-                            let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                            alert.addAction(alertAction)
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                    } else{
-                        let alert = UIAlertController(title: "ooops !", message: "add minute", preferredStyle: .alert)
-                        let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                        alert.addAction(alertAction)
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }else{
-                    //print("hour")
-                    let alert = UIAlertController(title: "ooops !", message: "enter hour 1-3", preferredStyle: .alert)
-                    let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                    alert.addAction(alertAction)
-                    self.present(alert, animated: true, completion: nil)
-
-                }
-            }else{
-                //txtHour.text = "0"
-                let alert = UIAlertController(title: "ooops !", message: "add hour", preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-                alert.addAction(alertAction)
-                self.present(alert, animated: true, completion: nil)
-            }
-        }else{
-            print("enter exercise name")
-            let alert = UIAlertController(title: "ooops !", message: "enter exercise name", preferredStyle: .alert)
-            let alertAction = UIAlertAction(title: "close", style: .default, handler: nil)
-            alert.addAction(alertAction)
-            self.present(alert, animated: true, completion: nil)
-         }
-        //calendar.reloadData()
-        //fetchFromDb()
-    }*/
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func alertView(message: String){
+        let alert = UIAlertController(title: "oooops!", message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "ok", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
-    */
-
 }
+
 extension HomeViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
