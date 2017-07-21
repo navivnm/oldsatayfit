@@ -27,7 +27,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var lblWeek: UILabel!
     @IBOutlet weak var lblMonth: UILabel!
     
-    @IBOutlet weak var txtViewSets: UITextView!
+    @IBOutlet weak var lblTodayInfo: UILabel!
     
     @IBOutlet weak var buttonToday: UIButton!
     @IBOutlet weak var btnSetInfo: UIButton!
@@ -36,6 +36,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     
     @IBOutlet weak var btnClose: UIBarButtonItem!
     @IBOutlet weak var btnSave: UIBarButtonItem!
+    @IBOutlet weak var btnAddToday: UIBarButtonItem!
     
     var dataArray = [NSManagedObject]()
     var nameArray = [String]()
@@ -74,7 +75,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         tbleViewHome.register(cellNib, forCellReuseIdentifier: tableNib.ViewControllerCell)
         
         //loadDb()
-        txtViewSets.isHidden = true
+        lblTodayInfo.isHidden = true
         viewToday.isHidden = true
         viewToday.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
         //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
@@ -100,7 +101,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         view.layer.addSublayer(shapeLayer)
         */
         title = "Home"
-
+        viewToday.backgroundColor = UIColor(patternImage: UIImage(named: "viewbg")!)
         /////////tab bar text color
         //let unselectedColor   = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
         //let selectedColor = UIColor(red: 255/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
@@ -343,26 +344,33 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     }
     
     @IBAction func btnSets(_ sender: Any) {
-        if !txtViewSets.isHidden {
-            txtViewSets.isHidden = true
+        if !lblTodayInfo.isHidden {
+            lblTodayInfo.isHidden = true
             btnSetInfo.tintColor = UIColor.black
-            txtExerciseName.isEnabled = false
-        }else{
-            txtViewSets.isHidden = false
-            btnSetInfo.tintColor = UIColor.red
             txtExerciseName.isEnabled = true
+            txtExerciseRep.isEnabled = true
+            txtHour.isEnabled = true
+            txtMinute.isEnabled = true
+        }else{
+            lblTodayInfo.isHidden = false
+            btnSetInfo.tintColor = UIColor.red
+            txtExerciseName.isEnabled = false
+            txtExerciseRep.isEnabled = false
+            txtHour.isEnabled = false
+            txtMinute.isEnabled = false
         }
     }
     
     /////////btn show/hide view
     @IBAction func addToday(_ sender: Any) {
-        print("haii")
+        //print("haii")
         title = "Today"
         self.btnClose.isEnabled = true
         self.btnClose.tintColor = UIColor.black
         self.btnSave.isEnabled = true
         self.btnSave.tintColor = .black
-        
+        self.btnAddToday.isEnabled = false
+        self.btnAddToday.tintColor = .clear
         //lblDay.center.x = lblWeek.center.x
         if viewToday.isHidden == true {
             viewToday.isHidden = false
@@ -371,8 +379,31 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         }
     }
     
+    @IBAction func addTodayView(_ sender: Any) {
+        title = "Today"
+        self.btnClose.isEnabled = true
+        self.btnClose.tintColor = UIColor.black
+        self.btnSave.isEnabled = true
+        self.btnSave.tintColor = .black
+        self.btnAddToday.isEnabled = false
+        self.btnAddToday.tintColor = .clear
+        //lblDay.center.x = lblWeek.center.x
+        if viewToday.isHidden == true {
+            viewToday.isHidden = false
+        }else{
+            viewToday.isHidden = true
+        }
+    }
     
     @IBAction func btnRemoveToday(_ sender: Any) {
+        if btnSetInfo.tintColor == UIColor.red{
+            txtExerciseName.isEnabled = true
+            txtExerciseRep.isEnabled = true
+            txtHour.isEnabled = true
+            txtMinute.isEnabled = true
+            btnSetInfo.tintColor = UIColor.black
+        }
+        
         title = "Home"
         txtExerciseName.resignFirstResponder()
         txtExerciseRep.resignFirstResponder()
@@ -391,15 +422,19 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         
         self.btnClose.isEnabled = false
         self.btnClose.tintColor = .clear
+        
         self.btnSave.isEnabled = false
         self.btnSave.tintColor = .clear
+        
+        self.btnAddToday.isEnabled = true
+        self.btnAddToday.tintColor = .black
         
         viewToday.isHidden = true
         txtExerciseName.text = ""
         txtExerciseRep.text = ""
         txtHour.text = ""
         txtMinute.text = ""
-        txtViewSets.isHidden = true
+        lblTodayInfo.isHidden = true
     }
     
 
@@ -573,6 +608,7 @@ extension HomeViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if nameArray.count != 0{
+            buttonToday.isHidden = true
             let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.ViewControllerCell, for: indexPath) as! ViewControllerCell
             cell.lblCellExercise.text = nameArray[indexPath.row]
             cell.lblCellDate.text = dateArray[indexPath.row]
@@ -586,7 +622,11 @@ extension HomeViewController: UITableViewDataSource{
             cell.lblCellTime.text = "0" + String(hourArray[indexPath.row]) + ":" + zero + String(minuteArray[indexPath.row])
             return cell
         }else if nameArray.count == 0{
-            return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
+            //return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
+            buttonToday.isHidden = false
+            let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound, for: indexPath) as! NothingFoundCell
+            cell.lblNothing.text = "did u exercise today? then add it"
+            return cell
         }else{
             return UITableViewCell()
         }

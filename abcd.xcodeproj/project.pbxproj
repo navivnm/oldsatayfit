@@ -36,6 +36,7 @@
 		6DD6CF011E86ABC30085C862 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DD6CF001E86ABC30085C862 /* Assets.xcassets */; };
 		6DD6CF041E86ABC30085C862 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DD6CF021E86ABC30085C862 /* LaunchScreen.storyboard */; };
 		6DEA0FBC1EB1EA7500F4337F /* BmrViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA0FBB1EB1EA7500F4337F /* BmrViewController.swift */; };
+		6DF950A51F22031700A86ED2 /* NothingFoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF950A41F22031700A86ED2 /* NothingFoundCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		6DD6CF031E86ABC30085C862 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DD6CF051E86ABC30085C862 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DEA0FBB1EB1EA7500F4337F /* BmrViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BmrViewController.swift; sourceTree = "<group>"; };
+		6DF950A41F22031700A86ED2 /* NothingFoundCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NothingFoundCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				6DB76F5B1EA770A3002D42CD /* BmiViewController.swift */,
 				6DBEF7EE1E969B29005CB0C2 /* HomeViewController.swift */,
 				6D11AFBE1E9DF90200868C26 /* ViewControllerCell.swift */,
+				6DF950A41F22031700A86ED2 /* NothingFoundCell.swift */,
 				6D11AFBF1E9DF90200868C26 /* ViewControllerCell.xib */,
 				6D11AFC21E9E013E00868C26 /* NothingFoundCell.xib */,
 				6DD6CEFA1E86ABC30085C862 /* Main.storyboard */,
@@ -275,6 +278,7 @@
 				6DB5820C1E88224A000596B2 /* FSCalendarScopeHandle.m in Sources */,
 				6DBEF7EF1E969B29005CB0C2 /* HomeViewController.swift in Sources */,
 				6DB5820A1E88224A000596B2 /* FSCalendarExtensions.m in Sources */,
+				6DF950A51F22031700A86ED2 /* NothingFoundCell.swift in Sources */,
 				6DB582041E88224A000596B2 /* FSCalendarCell.m in Sources */,
 				6DB582061E88224A000596B2 /* FSCalendarCollectionViewLayout.m in Sources */,
 				6DB582031E88224A000596B2 /* FSCalendarCalculator.m in Sources */,

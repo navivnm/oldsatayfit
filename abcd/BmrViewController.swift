@@ -36,12 +36,17 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var segmentDRI: UISegmentedControl!
     
     @IBOutlet weak var viewInfo: UIView!
+    @IBOutlet weak var barTitle: UINavigationItem!
+    @IBOutlet weak var btnClose: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         viewInfo.isHidden = true
         hideKeyboard()
         //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
+        btnClose.isEnabled = false
+        btnClose.tintColor = .clear
         
         self.txtAge.delegate = self
         self.txtWeight.delegate = self
@@ -209,13 +214,20 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
     }
 
     @IBAction func btnCalorieInfo(_ sender: Any) {
+        btnClose.isEnabled = true
+        btnClose.tintColor = .black
+        barTitle.title = "What is BMR?"
         viewInfo.isHidden = false
-        txtViewInfo.text = "The Basal Metabolic Rate (BMR) Calculator estimates your basal metabolic rate—the amount of energy expended while at rest in a neutrally temperate environment, and in a post-absorptive state (meaning that the digestive system is inactive, which requires about 12 hours of fasting). This calculator is based on the Mifflin - St Jeor equation. \n\nReference: \nThe Basal Metabolic Rate (BMR) is the amount of energy you need while resting in a temperate environment during the post-absorptive state, or when your digestive system is inactive. In such a state, your energy will be used only to maintain your vital organs, which include the heart, lungs, kidneys, the nervous system, intestines, liver, lungs, sex organs, muscles, and skin. The BMR decreases with age and increases with muscle mass \n\nThe BMR is measured under very restrictive circumstances while awake. An accurate BMR measurement requires that a person's sympathetic nervous system is inactive, which means the person must be completely rested. Basal metabolism is usually the largest component of a person's total caloric needs. The daily calorie needs is the BMR value multiplied by a factor with a value between 1.2 and 1.9, depending on the activity level"
+        txtViewInfo.text = "The Basal Metabolic Rate (BMR) Calculator estimates your basal metabolic rate—the amount of energy expended while at rest in a neutrally temperate environment, and in a post-absorptive state (meaning that the digestive system is inactive, which requires about 12 hours of fasting). This calculator is based on the Mifflin - St Jeor equation. \n\nReference: \nThe Basal Metabolic Rate (BMR) is the amount of energy you need while resting in a temperate environment during the post-absorptive state, or when your digestive system is inactive. In such a state, your energy will be used only to maintain your vital organs, which include the heart, lungs, kidneys, the nervous system, intestines, liver, lungs, sex organs, muscles, and skin. The BMR decreases with age and increases with muscle mass \n\nThe BMR is measured under very restrictive circumstances while awake. An accurate BMR measurement requires that a person's sympathetic nervous system is inactive, which means the person must be completely rested. Basal metabolism is usually the largest component of a person's total caloric needs. The daily calorie needs is the BMR value multiplied by a factor with a value between 1.2 and 1.9, depending on the activity level."
     }
     
-    @IBAction func btnVIewClose(_ sender: Any) {
+    @IBAction func btnViewClose(_ sender: Any) {
+        btnClose.isEnabled = false
+        btnClose.tintColor = .clear
+        barTitle.title = "BMR + Calorie calculator"
         viewInfo.isHidden = true
     }
+
     
     func alertView(message: String){
         let alert = UIAlertController(title: "oooops!", message: message, preferredStyle: .alert)
