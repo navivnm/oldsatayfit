@@ -28,6 +28,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var lblMonth: UILabel!
     
     @IBOutlet weak var lblTodayInfo: UILabel!
+    @IBOutlet weak var lblHealth: UILabel!
     
     @IBOutlet weak var buttonToday: UIButton!
     @IBOutlet weak var btnSetInfo: UIButton!
@@ -46,6 +47,9 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     var minuteArray = [Int]()
     var fetchArray = [NSManagedObject]()
 
+    var minuteMax = Int()
+    var hourMax = Int()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -146,6 +150,9 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
             minuteArray.append(i.value(forKey: "minute") as! Int)
         }
         tbleViewHome.reloadData()
+        hourMax = hourArray.reduce(0, +)
+        minuteMax = minuteArray.reduce(0, +)
+        print("new hr",hourMax,minuteMax)
         //graphData()
     }
     
@@ -454,7 +461,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         txtMinute.text = "0"
                     }else{
                         if let a = Int(txtMinute.text!){
-                            if a <= 0 {
+                            if hour <= 0 && a <= 0 {
                                 alertView(message: "enter minute 0-59")
                                 return
                             }
@@ -528,7 +535,17 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             //print(count)
                             do{
                                 try managedObjectContext?.save()
-                                print("SAVEEEDDDDDDD")
+                                lblHealth.text = "SAVED"
+                                lblHealth.textColor = .white
+                                btnSave.isEnabled = false
+                                let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
+                                DispatchQueue.main.asyncAfter(deadline: when) {
+                                    // Your code with delay
+                                    self.lblHealth.text = "Health Is Wealth"
+                                    self.lblHealth.textColor = .black
+                                    self.btnSave.isEnabled = true
+                                    //self.loadDb()
+                                }
                                 txtExerciseName.resignFirstResponder()
                                 txtHour.resignFirstResponder()
                                 txtMinute.resignFirstResponder()
@@ -536,7 +553,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 print("save errorrr",error)
                             }
                         } else{
-                            //print("minutee")
+                            print("minutee",txtMinute.text!)
                             alertView(message: "enter minute 0-59")
                         }
                     } else{

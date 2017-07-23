@@ -184,7 +184,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                     }
                 }
             }else{
-                alertView(message: "add required details")
+                alertView(message: "add age, height & weight")
                 print("not intt lbsss")
             }
         }else{
@@ -207,7 +207,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                     }
                 }
             }else{
-                alertView(message: "add required details")
+                alertView(message: "add age, height & weight")
                 print("not intt")
             }
         }
@@ -218,7 +218,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
         btnClose.tintColor = .black
         barTitle.title = "What is BMR?"
         viewInfo.isHidden = false
-        txtViewInfo.text = "The Basal Metabolic Rate (BMR) Calculator estimates your basal metabolic rate—the amount of energy expended while at rest in a neutrally temperate environment, and in a post-absorptive state (meaning that the digestive system is inactive, which requires about 12 hours of fasting). This calculator is based on the Mifflin - St Jeor equation. \n\nReference: \nThe Basal Metabolic Rate (BMR) is the amount of energy you need while resting in a temperate environment during the post-absorptive state, or when your digestive system is inactive. In such a state, your energy will be used only to maintain your vital organs, which include the heart, lungs, kidneys, the nervous system, intestines, liver, lungs, sex organs, muscles, and skin. The BMR decreases with age and increases with muscle mass \n\nThe BMR is measured under very restrictive circumstances while awake. An accurate BMR measurement requires that a person's sympathetic nervous system is inactive, which means the person must be completely rested. Basal metabolism is usually the largest component of a person's total caloric needs. The daily calorie needs is the BMR value multiplied by a factor with a value between 1.2 and 1.9, depending on the activity level."
+        txtViewInfo.text = "The Basal Metabolic Rate (BMR) Calculator estimates your basal metabolic rate—the amount of energy expended while at rest in a neutrally temperate environment, and in a post-absorptive state (meaning that the digestive system is inactive, which requires about 12 hours of fasting). This calculator is based on the Mifflin - St Jeor equation. \n\nReference: \nThe Basal Metabolic Rate (BMR) is the amount of energy you need while resting in a temperate environment during the post-absorptive state, or when your digestive system is inactive. In such a state, your energy will be used only to maintain your vital organs, which include the heart, lungs, kidneys, the nervous system, intestines, liver, lungs, sex organs, muscles, and skin. The BMR decreases with age and increases with muscle mass \n\nThe BMR is measured under very restrictive circumstances while awake. An accurate BMR measurement requires that a person's sympathetic nervous system is inactive, which means the person must be completely rested. Basal metabolism is usually the largest component of a person's total caloric needs. The daily calorie needs is the BMR value multiplied by a factor with a value between 1.2 and 1.9, depending on the activity level. \n\nWe never show daily calorie value less than 1000kcal(women), 1200kcal(men). If you need to lose weight by lowering daily calorie less than 1000kcal(women), 1200kcal(men), consult a docter and take decision after that"
     }
     
     @IBAction func btnViewClose(_ sender: Any) {
@@ -240,73 +240,121 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
     
     func driValueDisplay(driVal :Int){
         let cal = "Cal"
+        
+        var minCalorie = 0
+        if switchMF.isOn{
+            minCalorie = 1000
+        }else{
+            minCalorie = 1200
+        }
+        
         if switchKGLBS.isOn{
-            if driVal >= 1000{
+            if driVal >= minCalorie{
                 lblMaintain.text = "maintain weight- " + String(driVal) + cal
             }else{
-                lblMaintain.text = "maintain weight- " + "1000" + cal
+                if switchMF.isOn{
+                    lblMaintain.text = "maintain weight- " + "1000" + cal
+                }else{
+                    lblMaintain.text = "maintain weight- " + "1200" + cal
+                }
             }
         
             let half = driVal - 500
-            if half >= 1000{
+            if half >= minCalorie{
                 lblHalf.text = "lose 0.5lbs- " + String(half) + cal
             }else{
-                lblHalf.text = "lose 0.5lbs- " + "1000" + cal
+                if switchMF.isOn{
+                    lblHalf.text = "lose 0.5lbs- " + "1000" + cal
+                }else{
+                    lblHalf.text = "lose 0.5lbs- " + "1200" + cal
+                }
             }
         
             let full = driVal - 1000
-            if full >= 1000 {
+            if full >= minCalorie {
                 lblFull.text = "lose 1lbs- " + String(full) + cal
             }else{
-                lblFull.text = "lose 1lbs- " + "1000" + cal
+                if switchMF.isOn{
+                    lblFull.text = "lose 1lbs- " + "1000" + cal
+                }else{
+                    lblFull.text = "lose 1lbs- " + "1200" + cal
+                }
             }
         
             let halfPlus = driVal + 500
-            if halfPlus >= 1000 {
+            if halfPlus >= minCalorie {
                 lblHalfPlus.text = "gain 0.5lbs- " + String(halfPlus) + cal
             }else{
-                lblHalfPlus.text = "gain 0.5lbs- " + "1000" + cal
+                if switchMF.isOn{
+                    lblHalfPlus.text = "gain 0.5lbs- " + "1000" + cal
+                }else{
+                    lblHalfPlus.text = "gain 0.5lbs- " + "1200" + cal
+                }
             }
         
             let fullPlus = driVal + 1000
-            if fullPlus >= 1000 {
+            if fullPlus >= minCalorie {
                 lblFullPlus.text = "gain 1lbs- " + String(fullPlus) + cal
             }else{
-                lblFullPlus.text = "gain 1lbs- " + "1000" + cal
+                if switchMF.isOn{
+                    lblFullPlus.text = "gain 1lbs- " + "1000" + cal
+                }else{
+                    lblFullPlus.text = "gain 1lbs- " + "1200" + cal
+                }
             }
         }else{
-            if driVal >= 1000{
+            if driVal >= minCalorie{
                 lblMaintain.text = "maintain weight- " + String(driVal) + cal
             }else{
-                lblMaintain.text = "maintain weight- " + "1000" + cal
+                if switchMF.isOn{
+                    lblMaintain.text = "maintain weight- " + "1000" + cal
+                }else{
+                    lblMaintain.text = "maintain weight- " + "1200" + cal
+                }
             }
             
             let half = driVal - 500
-            if half >= 1000{
+            if half >= minCalorie{
                 lblHalf.text = "lose 0.5kg- " + String(half) + cal
             }else{
-                lblHalf.text = "lose 0.5kg- " + "1000" + cal
+                if switchMF.isOn{
+                    lblHalf.text = "lose 0.5kg- " + "1000" + cal
+                }else{
+                    lblHalf.text = "lose 0.5kg- " + "1200" + cal
+                }
             }
             
             let full = driVal - 1000
-            if full >= 1000 {
+            if full >= minCalorie {
                 lblFull.text = "lose 1kg- " + String(full) + cal
             }else{
-                lblFull.text = "lose 1kg- " + "1000" + cal
+                if switchMF.isOn{
+                    lblFull.text = "lose 1kg- " + "1000" + cal
+                }else{
+                    lblFull.text = "lose 1kg- " + "1200" + cal
+                }
             }
             
             let halfPlus = driVal + 500
-            if halfPlus >= 1000 {
+            if halfPlus >= minCalorie {
                 lblHalfPlus.text = "gain 0.5kg- " + String(halfPlus) + cal
             }else{
-                lblHalfPlus.text = "gain 0.5kg- " + "1000" + cal
+                if switchMF.isOn{
+                    lblHalfPlus.text = "gain 0.5kg- " + "1000" + cal
+                }else{
+                    lblHalfPlus.text = "gain 0.5kg- " + "1200" + cal
+                }
             }
             
             let fullPlus = driVal + 1000
-            if fullPlus >= 1000 {
+            if fullPlus >= minCalorie {
                 lblFullPlus.text = "gain 1kg- " + String(fullPlus) + cal
             }else{
-                lblFullPlus.text = "gain 1kg- " + "1000" + cal
+                if switchMF.isOn{
+                    lblFullPlus.text = "gain 1kg- " + "1000" + cal
+                }else{
+                    lblFullPlus.text = "gain 1kg- " + "1200" + cal
+                }
             }
         }
     }
@@ -339,7 +387,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                     return temp
                 }
             }else{
-                alertView(message: "enter age less than 125, height less than 9feet, weight less than 600lbs")
+                alertView(message: "add age less than 125, height less than 9feet, weight less than 600lbs")
                 return 0
             }
             
@@ -363,7 +411,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                 return temp
                 }
             }else{
-                alertView(message: "enter age less than 125, height less than 9feet, weight less than 600lbs")
+                alertView(message: "add age less than 125, height less than 9feet, weight less than 600lbs")
                 return 0
             }
         }
