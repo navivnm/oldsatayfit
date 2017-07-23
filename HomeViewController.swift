@@ -448,6 +448,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     ////////////////////////////save to coredata///////////////////////////////////////////
     
     @IBAction func btnSave(_ sender: Any) {
+        print("hhmm",hourMax,minuteMax)
+        
         if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             if (Int(txtHour.text!) == nil){
                 print("no int val")
@@ -462,7 +464,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     }else{
                         if let a = Int(txtMinute.text!){
                             if hour <= 0 && a <= 0 {
-                                alertView(message: "enter minute 0-59")
+                                //alertView(message: "enter minute 0-59")
+                                alertView(title: "ooops!", message: "add minute 0-59")
                                 return
                             }
                         }
@@ -482,11 +485,29 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 if temp >= 0 && temp < 100 {
                                     exerRep = temp
                                 }else{
-                                    alertView(message: "not in range")
+                                    //alertView(message: "not in range")
+                                    alertView(title: "ooops!", message: "add repeat less than 100")
                                     return
                                 }
                             }else{
                                 exerRep = 0
+                            }
+                            
+                            let tempHour = hourMax + hour
+                            let tempMinute = minuteMax + minute
+                            let temp = tempMinute % 60
+                            let totHour = (tempMinute - temp) / 60
+                            let temp1 = tempHour + totHour
+                            //minuteMax = temp
+                            print("hhmm", temp1,temp)
+                            if temp1 >= 4{
+                                let titleString = String(temp1) + " hour & " + String(temp) + " minute! "
+                                //alertView(message: "Don't do too much exercise. Do less than 4 hours a day")
+                                alertView(title: titleString, message: "Don't do too much exercise. Do less than 4 hours a day.. Take rest and comback tomorrow")
+                                return
+                            }else{
+                                hourMax = temp1//tempHour + totHour
+                                minuteMax = temp
                             }
                             
                             let datee = Date()
@@ -553,29 +574,34 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 print("save errorrr",error)
                             }
                         } else{
-                            print("minutee",txtMinute.text!)
-                            alertView(message: "enter minute 0-59")
+                            //print("minutee",txtMinute.text!)
+                            //alertView(message: "enter minute 0-59")
+                            alertView(title: "ooops!", message: "add minute 0-59")
                         }
                     } else{
-                        alertView(message: "add minute")
+                        //alertView(message: "add minute")
+                        alertView(title: "ooops!", message: "add minute")
                     }
                 }else{
                     //print("hour")
-                    alertView(message: "enter hour 1-3")
+                    //alertView(message: "enter hour 1-3")
+                    alertView(title: "ooops!", message: "add hour 1 - 3")
                 }
             }else{
                 //txtHour.text = "0"
-                alertView(message: "add hour")
+                //alertView(message: "add hour")
+                alertView(title: "ooops!", message: "add hour")
             }
         }else{
-            alertView(message: "enter exercise name")
+            alertView(title: "ooops!", message: "add exercise name")
+            //alertView(message: "enter exercise name")
         }
         //calendar.reloadData()
         //fetchFromDb()
     }
     
-    func alertView(message: String){
-        let alert = UIAlertController(title: "oooops!", message: message, preferredStyle: .alert)
+    func alertView(title: String,message: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "ok", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
