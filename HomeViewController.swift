@@ -465,7 +465,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         if let a = Int(txtMinute.text!){
                             if hour <= 0 && a <= 0 {
                                 //alertView(message: "enter minute 0-59")
-                                alertView(title: "ooops!", message: "add minute 0-59")
+                                alertView(title: "ooops!", message: "add minute 1-59")
                                 return
                             }
                         }
@@ -500,10 +500,10 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             let temp1 = tempHour + totHour
                             //minuteMax = temp
                             print("hhmm", temp1,temp)
-                            if temp1 >= 4{
+                            if temp1 >= 3{
                                 let titleString = String(temp1) + " hour & " + String(temp) + " minute! "
                                 //alertView(message: "Don't do too much exercise. Do less than 4 hours a day")
-                                alertView(title: titleString, message: "Don't do too much exercise. Do less than 4 hours a day.. Take rest and comback tomorrow")
+                                alertView(title: titleString, message: "Don't do too much exercise. Do less than 3 hours a day.. Take rest and comback tomorrow")
                                 return
                             }else{
                                 hourMax = temp1//tempHour + totHour
@@ -576,7 +576,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         } else{
                             //print("minutee",txtMinute.text!)
                             //alertView(message: "enter minute 0-59")
-                            alertView(title: "ooops!", message: "add minute 0-59")
+                            alertView(title: "ooops!", message: "add minute 1-59")
                         }
                     } else{
                         //alertView(message: "add minute")
@@ -655,7 +655,7 @@ extension HomeViewController: UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.ViewControllerCell, for: indexPath) as! ViewControllerCell
             cell.lblCellExercise.text = nameArray[indexPath.row]
             cell.lblCellDate.text = dateArray[indexPath.row]
-            cell.lblCellRep.text = String(repArray[indexPath.row])
+            //cell.lblCellRep.text = String(repArray[indexPath.row])
             var zero = ""
             if minuteArray[indexPath.row] < 10 {
                 zero = "0"
@@ -663,10 +663,18 @@ extension HomeViewController: UITableViewDataSource{
                 zero = ""
             }
             cell.lblCellTime.text = "0" + String(hourArray[indexPath.row]) + ":" + zero + String(minuteArray[indexPath.row])
+            
+            if repArray[indexPath.row] < 10 {
+                zero = "0"
+            }else{
+                zero = ""
+            }
+            cell.lblCellRep.text = zero + String(repArray[indexPath.row])
+            
             return cell
         }else if nameArray.count == 0{
-            //return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
             buttonToday.isHidden = false
+            //return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
             let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound, for: indexPath) as! NothingFoundCell
             cell.lblNothing.text = "did u exercise today? then add it"
             return cell

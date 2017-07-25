@@ -622,11 +622,21 @@ extension ViewController: UITableViewDataSource{
                 zero = ""
             }
             cell.lblCellTime.text = "0" + String(hourArray[indexPath.row]) + ":" + zero + String(minuteArray[indexPath.row])
+            
+            if repArray[indexPath.row] < 10 {
+                zero = "0"
+            }else{
+                zero = ""
+            }
+            cell.lblCellRep.text = zero + String(repArray[indexPath.row])
+            
             return cell
         }else if nameArray.count == 0{
-            //let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell, for: ind)
             fetchFromDb()
-            return tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell)!
+            //return tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell)!
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableViewNibCell.NothingFoundCell, for: indexPath) as! NothingFoundCell
+            cell.lblNothing.text = "select a date to view your history"
+            return cell
         }else{
             return UITableViewCell()
         }
