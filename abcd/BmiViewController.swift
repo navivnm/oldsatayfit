@@ -157,7 +157,7 @@ class BmiViewController: UIViewController {
 
     
     func bmiCalculation(){
-        print("hhww",weight,height)
+        //print("hhww",weight,height)
         let temp0 = Float(height/100)
         //print(temp0)
         let temp1 = temp0*temp0

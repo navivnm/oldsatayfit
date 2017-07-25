@@ -159,21 +159,21 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         
         if let defaultdate = defaults.value(forKey: "defaultDate") as? String{
             if defaultdate == ""{
-                print("ddd null",startDate)
+                //print("ddd null",startDate)
             }else{
-                print("ddd",defaultdate,startDate)
+                //print("ddd",defaultdate,startDate)
                 startDate = defaultdate
             }
         }
         
         if startDate != "" {
             let dateString = startDate // change to your date format
-            print("new start", startDate)
+            //print("new start", startDate)
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy/MM/dd"
             //dateFormatter.dateFormat = "dd/MM/yyyy"
             let dateee = dateFormatter.date(from: dateString)!
-            print("new date",dateee)
+            //print("new date",dateee)
             newDate = dateee
         }
         
@@ -196,13 +196,13 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         comps2.month = 1
         comps2.day = -1
         let endOfMonth = Calendar.current.date(byAdding: comps2, to: startOfMonth)!
-        let endDate = dateFormatter.string(from: endOfMonth)
+        //let endDate = dateFormatter.string(from: endOfMonth)
         //print("sssss",endOfMonth!,endDate)
         //print("end date \(endDate,dateFormatter.string(from: endOfMonth!))")
         
         if startDate == ""{
             startDate = startDateLocal
-            print("/////new////656565",startDate,endDate,startOfMonth)
+            //print("/////new////656565",startDate,endDate,startOfMonth)
         }
         
         //////////////////////////////////
@@ -231,11 +231,11 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         
         do{
             testDb = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
-            print("count",testDb.count)
+            //print("count",testDb.count)
             
             for i in testDb {
                 //print("name \(i.value(forKey: "name")!)")
-                print(i.value(forKey: "number")!)
+                //print(i.value(forKey: "number")!)
                 //print(i.value(forKey: "date")!)
                 //print(i.value(forKey: "saveday")!)
                 //print(i.value(forKey: "savemonth")!)
@@ -251,9 +251,9 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             
             num = Array(Set(num))
             
-            for i in num {
-                print("nummmm", i)
-            }
+            /*for i in num {
+                //print("nummmm", i)
+            }*/
             
         }catch{
             print(error)
@@ -261,11 +261,11 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
        // [calendar.setNeedsDisplay()]
         startDate = ""
         calendar.reloadData()
-        print("after load", startDate,endDate,num.count)
+        //print("after load", startDate,endDate,num.count)
     }
     
     func loadDb(){
-        print("load with current date")
+        //print("load with current date")
         stopDB = true
         calenderDate = []
         nameArray = []
@@ -298,7 +298,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
         dateTitle = dateFormatter.string(from: date)
-        print("aaabbbbbbbbb", dateTitle)
+        //print("aaabbbbbbbbb", dateTitle)
     }
     
     ///////////////////////////////calendar////////////////////////////////
@@ -319,7 +319,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         //////////// coredata
         if stopDB == false {
             
-            print("load with current date")
+            //print("load with current date")
             stopDB = true
             calenderDate = []
             nameArray = []
@@ -352,7 +352,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd"
             dateTitle = dateFormatter.string(from: date)
-            print("aaabbbbbbbbb", dateTitle)
+            //print("aaabbbbbbbbb", dateTitle)
         }
         return self.gregorian.isDateInToday(date) ? dateTitle : nil
     }
@@ -404,15 +404,15 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             a = true
             dateFormatter.dateFormat = "dd"
             saveDay = dateFormatter.string(from: date)
-            print("aaabbbbbbbbb", saveDay,saveDate)
+            //print("aaabbbbbbbbb", saveDay,saveDate)
             
             dateFormatter.dateFormat = "MM"
             saveMonth = dateFormatter.string(from: date)
-            print("aabbbbbbbbb", saveMonth)
+            //print("aabbbbbbbbb", saveMonth)
             
             dateFormatter.dateFormat = "yyyy"
             saveYear = dateFormatter.string(from: date)
-            print("aabbbbbbbbb", saveYear)
+            //print("aabbbbbbbbb", saveYear)
             /*print("dayyyy 11",calendar.component(.day, from: date))
             print("dayyyy 11",calendar.component(.month, from: date))
             print("dayyyy 11",calendar.component(.year, from: date))*/
@@ -508,9 +508,9 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         let showDate = inputFormatter.date(from: oldDate)
         inputFormatter.dateFormat = "yyyy/MM"
         let resultString = inputFormatter.string(from: showDate!)
-        print("*/*/*/*/*/*/",resultString)
+        //print("*/*/*/*/*/*/",resultString)
         
-         print("change",resultString , newDate)
+         //print("change",resultString , newDate)
         if resultString != newDate{
             nameArray = []
             tableData.reloadData()
@@ -530,7 +530,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         let showDate = inputFormatter.date(from: oldDate)!
         inputFormatter.dateFormat = "dd-MM-yyyy"
         let resultString = inputFormatter.string(from: showDate)
-        print("-----",resultString,showDate)
+        //print("-----",resultString,showDate)
         calendar.select(showDate)
         compareDate = resultString
         //////// coredata
@@ -597,7 +597,7 @@ extension ViewController: UITableViewDataSource{
     //////table row
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if nameArray.count > 0{
-            print("table",calenderDate.count,nameArray.count,num.count)
+            //print("table",calenderDate.count,nameArray.count,num.count)
             return nameArray.count
         }else{
             return 1
@@ -652,7 +652,7 @@ extension ViewController: UITableViewDataSource{
             dateFormatter.dateFormat = "dd-MM-yyyy"
             compareDate = dateFormatter.string(from: date)
         }
-        print("cal",saveDate,compareDate)
+        //print("cal",saveDate,compareDate)
         
         if calenderDate.count > 0 && compareDate == saveDate{
             //print("true")
@@ -664,7 +664,7 @@ extension ViewController: UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            print("deleteee")
+            //print("deleteee")
             //nameArray.remove(at: indexPath.row)
             //dateArray.remove(at: indexPath.row)
             //tableData.deleteRows(at: [indexPath], with: .automatic)

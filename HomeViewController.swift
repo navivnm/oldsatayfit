@@ -85,7 +85,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
         tbleViewHome.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
         tbleViewHome.rowHeight = 80
-        print("loadddddd")
+        //print("loadddddd")
         
         /////////// create circle
         /*let circlePath = UIBezierPath(arcCenter: CGPoint(x: 100,y: 100), radius: CGFloat(40), startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
@@ -152,7 +152,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         tbleViewHome.reloadData()
         hourMax = hourArray.reduce(0, +)
         minuteMax = minuteArray.reduce(0, +)
-        print("new hr",hourMax,minuteMax)
+        //print("new hr",hourMax,minuteMax)
         //graphData()
     }
     
@@ -170,9 +170,9 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         let calendar = NSCalendar.current
         let now = NSDate()
         let sevenDaysAgo = calendar.date(byAdding: .day, value: history, to: now as Date)!
-        let startDate = calendar.startOfDay(for: sevenDaysAgo)
+        //let startDate = calendar.startOfDay(for: sevenDaysAgo)
         
-        print("hhhhhhhistory",history,startDate)
+        //print("hhhhhhhistory",history,startDate)
         
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "dd-MM-YYYY"
@@ -189,7 +189,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         dateFormat.dateFormat = "YYYY"
         let yyyy = dateFormat.string(from: sevenDaysAgo)
         
-        print("yesterday",dd,mm,yyyy)
+        //print("yesterday",dd,mm,yyyy)
         
         ///////today/////////
         dateFormat.dateFormat = "dd"
@@ -201,13 +201,13 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         dateFormat.dateFormat = "YYYY"
         let yyyyToday = dateFormat.string(from: now as Date)
         
-        print("today", ddToday,mmToday,yyyyToday)
+        //print("today", ddToday,mmToday,yyyyToday)
         
         if mm != mmToday{
             /*if yyyy != yyyyToday{
                 print("month not y not")
             }else{*/
-                print("month not y yes")
+                //print("month not y yes")
                 let m = Int(mm)
                 let y = Int(yyyy)
                 
@@ -218,7 +218,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 let range = calendar.range(of: .day, in: .month, for: date)!
                 let temp = range.count
                 let numDays = String(temp)
-                print("days in month",numDays)
+                //print("days in month",numDays)
                 
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
                 let predicate = NSPredicate(format: "((saveday >= %@) && (saveday <= %@)) && savemonth == %@ && saveyear == %@ ", dd, numDays, mm, yyyy)
@@ -250,7 +250,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     let temp = sumMinute % 60
                     let temp2 = (sumMinute - temp) / 60
                     let totalHour = sumHour + temp2
-                    print("sum", sumHour,totalHour, temp)
+                    //print("sum", sumHour,totalHour, temp)
                     var zero = ""
                     if temp < 10 {
                         zero = "0"
@@ -278,7 +278,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
             fetchRequest.predicate = predicate
             do{
                 fetchArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
-                print("fetchdbcount",fetchArray.count)
+                //print("fetchdbcount",fetchArray.count)
                 
                 for i in fetchArray {
                     hourArray.append(i.value(forKey: "hour") as! Int)
@@ -290,7 +290,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 let temp = sumMinute % 60
                 let temp2 = (sumMinute - temp) / 60
                 let totalHour = sumHour + temp2
-                print("sum", sumHour,totalHour, temp)
+                //print("sum", sumHour,totalHour, temp)
                 
                 var zero = ""
                 if temp < 10 {
@@ -323,7 +323,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("home")
+        //print("home")
         nameArray = []
         dateArray = []
         repArray = []
@@ -448,11 +448,11 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     ////////////////////////////save to coredata///////////////////////////////////////////
     
     @IBAction func btnSave(_ sender: Any) {
-        print("hhmm",hourMax,minuteMax)
+        //print("hhmm",hourMax,minuteMax)
         
         if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             if (Int(txtHour.text!) == nil){
-                print("no int val")
+                //print("no int val")
                 txtHour.text = "0"
             }
             
@@ -499,7 +499,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             let totHour = (tempMinute - temp) / 60
                             let temp1 = tempHour + totHour
                             //minuteMax = temp
-                            print("hhmm", temp1,temp)
+                            //print("hhmm", temp1,temp)
                             if temp1 >= 3{
                                 let titleString = String(temp1) + " hour & " + String(temp) + " minute! "
                                 //alertView(message: "Don't do too much exercise. Do less than 4 hours a day")
@@ -520,8 +520,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             
                             //print(year!)
                             //print(month!)
-                            print(day!)
-                            print("hiiii")
+                            //print(day!)
+                            //print("hiiii")
                             
                             let date = Date()
                             let dateFormatter = DateFormatter()
@@ -531,15 +531,15 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             
                             dateFormatter.dateFormat = "dd"
                             let saveDay = dateFormatter.string(from: date)
-                            print("aaabbbbbbbbb", saveDay,saveDate)
+                            //print("aaabbbbbbbbb", saveDay,saveDate)
                             
                             dateFormatter.dateFormat = "MM"
                             let saveMonth = dateFormatter.string(from: date)
-                            print("aabbbbbbbbb", saveMonth)
+                            //print("aabbbbbbbbb", saveMonth)
                             
                             dateFormatter.dateFormat = "yyyy"
                             let saveYear = dateFormatter.string(from: date)
-                            print("aabbbbbbbbb", saveYear)
+                            //print("aabbbbbbbbb", saveYear)
                             
                             let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
                             let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
@@ -708,7 +708,7 @@ extension HomeViewController: UITableViewDataSource{
             }catch{
                 print("delete errpr",error)
             }
-            print("ok")
+            //print("ok")
         }
     }
 }

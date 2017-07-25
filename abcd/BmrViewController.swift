@@ -185,7 +185,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                 }
             }else{
                 alertView(message: "add age, height & weight")
-                print("not intt lbsss")
+                //print("not intt lbsss")
             }
         }else{
             if (Int(txtAge.text!) != nil) && (Int(txtWeight.text!) != nil || Float(txtWeight.text!) != nil) && (Int(txtHeightCm.text!) != nil || Float(txtHeightCm.text!) != nil){
@@ -208,7 +208,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                 }
             }else{
                 alertView(message: "add age, height & weight")
-                print("not intt")
+                //print("not intt")
             }
         }
     }
@@ -369,7 +369,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
             
             let lbs = Float(txtWeight.text!)!
             let weight = lbs / 2.2046
-            print("cccc",hight,weight)
+            //print("cccc",hight,weight)
             let age = Float(txtAge.text!)!
             
             if age <= 123 && hight <= 300 && weight <= 300{
