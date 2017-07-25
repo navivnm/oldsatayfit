@@ -44,7 +44,6 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
         viewInfo.isHidden = true
         hideKeyboard()
-        //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
         btnClose.isEnabled = false
         btnClose.tintColor = .clear
         
@@ -63,6 +62,7 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
         segmentDRI.selectedSegmentIndex = UISegmentedControlNoSegment
         lblBmr.text = "BMR:"
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -427,20 +427,3 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
     */
 
 }
-
-/*extension UIViewController
-{
-    func hideKeyboard()
-    {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIViewController.dismissKeyboard))
-        
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboard()
-    {
-        view.endEditing(true)
-    }
-}*/

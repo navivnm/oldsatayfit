@@ -11,12 +11,9 @@ import CoreData
 
 class HomeViewController: UIViewController,UITextFieldDelegate {
 
-    //let circleLayer = CAShapeLayer()
     let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)? .persistentContainer.viewContext
     
     @IBOutlet weak var tbleViewHome: UITableView!
-    
-    @IBOutlet weak var imgUser: UIImageView!
     
     @IBOutlet weak var txtExerciseName: UITextField!
     @IBOutlet weak var txtExerciseRep: UITextField!
@@ -55,13 +52,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
 
         // Do any additional setup after loading the view.
         self.hideKeyboard()
-        /*let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Click", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)*/
-        // Remove duplicates:
-        // first by converting to a Set
-        // and then back to Array
-        //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "exercise.jpg")!)
+        
         self.btnClose.isEnabled = false
         self.btnClose.tintColor = .clear
         self.btnSave.isEnabled = false
@@ -77,54 +68,29 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         
         cellNib = UINib(nibName: tableNib.ViewControllerCell, bundle: nil)
         tbleViewHome.register(cellNib, forCellReuseIdentifier: tableNib.ViewControllerCell)
-        
-        //loadDb()
+
         lblTodayInfo.isHidden = true
         viewToday.isHidden = true
         viewToday.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
-        //view.backgroundColor = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1.0)
         tbleViewHome.backgroundColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1.0)
         tbleViewHome.rowHeight = 80
-        //print("loadddddd")
         
-        /////////// create circle
-        /*let circlePath = UIBezierPath(arcCenter: CGPoint(x: 100,y: 100), radius: CGFloat(40), startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-        
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = circlePath.cgPath
-        
-        imgUser.layer.cornerRadius = 14.5
-        imgUser.clipsToBounds = true
-        
-        //change the fill color
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        //you can change the stroke color
-        shapeLayer.strokeColor = UIColor.white.cgColor//(red: 150/255, green: 245/255, blue: 255/255, alpha: 1.0).cgColor//UIColor.white.cgColor
-        //you can change the line width
-        shapeLayer.lineWidth = 3.0
-        view.layer.addSublayer(shapeLayer)
-        */
         title = "Home"
         viewToday.backgroundColor = UIColor(patternImage: UIImage(named: "viewbg")!)
-        /////////tab bar text color
-        //let unselectedColor   = UIColor(red: 255.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-        //let selectedColor = UIColor(red: 255/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-        
-        //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: unselectedColor], for: .normal)
-        //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: selectedColor], for: .selected)
     }
     
     struct tableNib {
         static let ViewControllerCell = "ViewControllerCell"
         static let NothingFound = "NothingFoundCell"
     }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        // I added this line
         UITabBar.appearance().tintColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
         
         return true
     }
+    
     func loadDb(){
         let date = Date()
         let dateFormatter = DateFormatter()
@@ -152,8 +118,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         tbleViewHome.reloadData()
         hourMax = hourArray.reduce(0, +)
         minuteMax = minuteArray.reduce(0, +)
-        //print("new hr",hourMax,minuteMax)
-        //graphData()
     }
     
     func callGraphData(){
@@ -170,14 +134,9 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         let calendar = NSCalendar.current
         let now = NSDate()
         let sevenDaysAgo = calendar.date(byAdding: .day, value: history, to: now as Date)!
-        //let startDate = calendar.startOfDay(for: sevenDaysAgo)
-        
-        //print("hhhhhhhistory",history,startDate)
-        
+
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "dd-MM-YYYY"
-        //let sevenDay = dateFormat.string(from: sevenDaysAgo)
-        //let today = dateFormat.string(from: now as Date)
         
         ///days before
         dateFormat.dateFormat = "dd"
@@ -189,8 +148,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         dateFormat.dateFormat = "YYYY"
         let yyyy = dateFormat.string(from: sevenDaysAgo)
         
-        //print("yesterday",dd,mm,yyyy)
-        
         ///////today/////////
         dateFormat.dateFormat = "dd"
         let ddToday = dateFormat.string(from: now as Date)
@@ -201,13 +158,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         dateFormat.dateFormat = "YYYY"
         let yyyyToday = dateFormat.string(from: now as Date)
         
-        //print("today", ddToday,mmToday,yyyyToday)
-        
         if mm != mmToday{
-            /*if yyyy != yyyyToday{
-                print("month not y not")
-            }else{*/
-                //print("month not y yes")
                 let m = Int(mm)
                 let y = Int(yyyy)
                 
@@ -218,7 +169,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 let range = calendar.range(of: .day, in: .month, for: date)!
                 let temp = range.count
                 let numDays = String(temp)
-                //print("days in month",numDays)
                 
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
                 let predicate = NSPredicate(format: "((saveday >= %@) && (saveday <= %@)) && savemonth == %@ && saveyear == %@ ", dd, numDays, mm, yyyy)
@@ -226,7 +176,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 do{
                     fetchArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
                     for i in fetchArray {
-                        //print(i.value(forKey: "name") as! String)
                         hourArray.append(i.value(forKey: "hour") as! Int)
                         minuteArray.append(i.value(forKey: "minute") as! Int)
                     }
@@ -238,10 +187,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 fetchRequest.predicate = predicateTwo
                 
                 do{
-                    //try fetchArray.append(managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject])
                     fetchArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
                     for i in fetchArray {
-                        //print(i.value(forKey: "name") as! String)
                         hourArray.append(i.value(forKey: "hour") as! Int)
                         minuteArray.append(i.value(forKey: "minute") as! Int)
                     }
@@ -250,7 +197,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     let temp = sumMinute % 60
                     let temp2 = (sumMinute - temp) / 60
                     let totalHour = sumHour + temp2
-                    //print("sum", sumHour,totalHour, temp)
                     var zero = ""
                     if temp < 10 {
                         zero = "0"
@@ -270,7 +216,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 }catch{
                     print(error)
                 }
-            //}
         }else{
         
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Test")
@@ -278,8 +223,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
             fetchRequest.predicate = predicate
             do{
                 fetchArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
-                //print("fetchdbcount",fetchArray.count)
-                
+
                 for i in fetchArray {
                     hourArray.append(i.value(forKey: "hour") as! Int)
                     minuteArray.append(i.value(forKey: "minute") as! Int)
@@ -290,7 +234,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 let temp = sumMinute % 60
                 let temp2 = (sumMinute - temp) / 60
                 let totalHour = sumHour + temp2
-                //print("sum", sumHour,totalHour, temp)
                 
                 var zero = ""
                 if temp < 10 {
@@ -313,24 +256,15 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                 print(error)
             }
         }
-        /*for i in aa {
-            aaName.append(i.value(forKey: "name") as! String)
-        }
-        for i in aaName {
-            print("i",i)
-        }
-        print(aaName.count)*/
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //print("home")
         nameArray = []
         dateArray = []
         repArray = []
         hourArray = []
         minuteArray = []
         loadDb()
-        //graphData()
         callGraphData()
         tbleViewHome.reloadData()
     }
@@ -370,7 +304,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     
     /////////btn show/hide view
     @IBAction func addToday(_ sender: Any) {
-        //print("haii")
         title = "Today"
         self.btnClose.isEnabled = true
         self.btnClose.tintColor = UIColor.black
@@ -378,7 +311,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         self.btnSave.tintColor = .black
         self.btnAddToday.isEnabled = false
         self.btnAddToday.tintColor = .clear
-        //lblDay.center.x = lblWeek.center.x
         if viewToday.isHidden == true {
             viewToday.isHidden = false
         }else{
@@ -394,7 +326,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         self.btnSave.tintColor = .black
         self.btnAddToday.isEnabled = false
         self.btnAddToday.tintColor = .clear
-        //lblDay.center.x = lblWeek.center.x
         if viewToday.isHidden == true {
             viewToday.isHidden = false
         }else{
@@ -448,11 +379,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     ////////////////////////////save to coredata///////////////////////////////////////////
     
     @IBAction func btnSave(_ sender: Any) {
-        //print("hhmm",hourMax,minuteMax)
-        
         if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             if (Int(txtHour.text!) == nil){
-                //print("no int val")
                 txtHour.text = "0"
             }
             
@@ -464,7 +392,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     }else{
                         if let a = Int(txtMinute.text!){
                             if hour <= 0 && a <= 0 {
-                                //alertView(message: "enter minute 0-59")
                                 alertView(title: "ooops!", message: "add minute 1-59")
                                 return
                             }
@@ -472,20 +399,12 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     }
                     
                     if let minute = Int(txtMinute.text!){
-                        /*var minute = Int()
-                         if (Int(txtMinute.text!) == nil) && hour >= 1{
-                         minute = 0
-                         }else{
-                         let a = txtMinute.text
-                         minute = Int(a!)!
-                         }*/
                         if minute >= 0 && minute < 60{
                             var exerRep = Int()
                             if let temp = Int(txtExerciseRep.text!){
                                 if temp >= 0 && temp < 100 {
                                     exerRep = temp
                                 }else{
-                                    //alertView(message: "not in range")
                                     alertView(title: "ooops!", message: "add repeat less than 100")
                                     return
                                 }
@@ -498,11 +417,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             let temp = tempMinute % 60
                             let totHour = (tempMinute - temp) / 60
                             let temp1 = tempHour + totHour
-                            //minuteMax = temp
-                            //print("hhmm", temp1,temp)
                             if temp1 >= 3{
                                 let titleString = String(temp1) + " hour & " + String(temp) + " minute! "
-                                //alertView(message: "Don't do too much exercise. Do less than 4 hours a day")
                                 alertView(title: titleString, message: "Don't do too much exercise. Do less than 3 hours a day.. Take rest and comback tomorrow")
                                 return
                             }else{
@@ -514,14 +430,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             let calendar = Calendar.current
                             let components = calendar.dateComponents([.year, .month, .day], from: datee)
                             
-                            //let year =  components.year
-                            //let month = components.month
                             let day = components.day
-                            
-                            //print(year!)
-                            //print(month!)
-                            //print(day!)
-                            //print("hiiii")
                             
                             let date = Date()
                             let dateFormatter = DateFormatter()
@@ -531,15 +440,12 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             
                             dateFormatter.dateFormat = "dd"
                             let saveDay = dateFormatter.string(from: date)
-                            //print("aaabbbbbbbbb", saveDay,saveDate)
                             
                             dateFormatter.dateFormat = "MM"
                             let saveMonth = dateFormatter.string(from: date)
-                            //print("aabbbbbbbbb", saveMonth)
                             
                             dateFormatter.dateFormat = "yyyy"
                             let saveYear = dateFormatter.string(from: date)
-                            //print("aabbbbbbbbb", saveYear)
                             
                             let entity = NSEntityDescription.entity(forEntityName: "Test", in: managedObjectContext!)
                             let object = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
@@ -553,7 +459,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             object.setValue(saveMonth, forKey: "savemonth")
                             object.setValue(saveYear, forKey: "saveyear")
                             
-                            //print(count)
                             do{
                                 try managedObjectContext?.save()
                                 lblHealth.text = "SAVED"
@@ -561,11 +466,10 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 btnSave.isEnabled = false
                                 let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
                                 DispatchQueue.main.asyncAfter(deadline: when) {
-                                    // Your code with delay
+                                    //code with delay
                                     self.lblHealth.text = "Health Is Wealth"
                                     self.lblHealth.textColor = .black
                                     self.btnSave.isEnabled = true
-                                    //self.loadDb()
                                 }
                                 txtExerciseName.resignFirstResponder()
                                 txtHour.resignFirstResponder()
@@ -574,30 +478,20 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 print("save errorrr",error)
                             }
                         } else{
-                            //print("minutee",txtMinute.text!)
-                            //alertView(message: "enter minute 0-59")
                             alertView(title: "ooops!", message: "add minute 1-59")
                         }
                     } else{
-                        //alertView(message: "add minute")
                         alertView(title: "ooops!", message: "add minute")
                     }
                 }else{
-                    //print("hour")
-                    //alertView(message: "enter hour 1-3")
                     alertView(title: "ooops!", message: "add hour 1 - 3")
                 }
             }else{
-                //txtHour.text = "0"
-                //alertView(message: "add hour")
                 alertView(title: "ooops!", message: "add hour")
             }
         }else{
             alertView(title: "ooops!", message: "add exercise name")
-            //alertView(message: "enter exercise name")
         }
-        //calendar.reloadData()
-        //fetchFromDb()
     }
     
     func alertView(title: String,message: String){
@@ -615,31 +509,6 @@ extension HomeViewController: UITableViewDelegate{
 }
 
 extension HomeViewController: UITableViewDataSource{
-
-  //  func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    //    return "Today's Summery"
-    //}
-    /*func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: tableView.sectionHeaderHeight))
-        // Do your customization
-        view.backgroundColor = UIColor.red
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 100, height: 20))
-        view.addSubview(label)
-        label.text = "exercise"
-        
-        let label2 = UILabel(frame: CGRect(x: 180, y: 0, width: 100, height: 20))
-        view.addSubview(label2)
-        label2.text = "set/reps"
-        
-        let label3 = UILabel(frame: CGRect(x: 280, y: 0, width: 100, height: 20))
-        view.addSubview(label3)
-        label3.text = "time"
-        return view
-    }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
-    }*/
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if nameArray.count != 0{
             return nameArray.count
@@ -655,7 +524,6 @@ extension HomeViewController: UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.ViewControllerCell, for: indexPath) as! ViewControllerCell
             cell.lblCellExercise.text = nameArray[indexPath.row]
             cell.lblCellDate.text = dateArray[indexPath.row]
-            //cell.lblCellRep.text = String(repArray[indexPath.row])
             var zero = ""
             if minuteArray[indexPath.row] < 10 {
                 zero = "0"
@@ -674,7 +542,6 @@ extension HomeViewController: UITableViewDataSource{
             return cell
         }else if nameArray.count == 0{
             buttonToday.isHidden = false
-            //return tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound,for: indexPath)
             let cell = tableView.dequeueReusableCell(withIdentifier: tableNib.NothingFound, for: indexPath) as! NothingFoundCell
             cell.lblNothing.text = "did u exercise today? then add it"
             return cell
@@ -691,7 +558,6 @@ extension HomeViewController: UITableViewDataSource{
         if editingStyle == .delete{
             
             nameArray.remove(at: indexPath.row)
-            //tbleViewHome.reloadRows(at: [indexPath], with: .automatic)
             
             managedObjectContext?.delete(dataArray[indexPath.row])
             do{
@@ -708,7 +574,6 @@ extension HomeViewController: UITableViewDataSource{
             }catch{
                 print("delete errpr",error)
             }
-            //print("ok")
         }
     }
 }
