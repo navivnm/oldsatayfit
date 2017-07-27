@@ -76,7 +76,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         tbleViewHome.rowHeight = 80
         
         title = "Home"
-        viewToday.backgroundColor = UIColor(patternImage: UIImage(named: "viewbg")!)
     }
     
     struct tableNib {
