@@ -153,7 +153,6 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
     }
     
     @IBAction func segmentActionDRI(_ sender: Any) {
-        
         txtAge.resignFirstResponder()
         txtWeight.resignFirstResponder()
         txtHeightCm.resignFirstResponder()
@@ -161,6 +160,30 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
         txtInches.resignFirstResponder()
         
         if switchKGLBS.isOn {
+            if let age = Int((txtAge.text?.trimmingCharacters(in: .whitespaces))!){
+                txtAge.text = String(age)
+            }else{
+                txtAge.text = ""
+            }
+            
+            if let weight = Int((txtWeight.text?.trimmingCharacters(in: .whitespaces))!){
+                txtWeight.text = String(weight)
+            }else{
+                txtWeight.text = ""
+            }
+            
+            if let feet = Int((txtFeet.text?.trimmingCharacters(in: .whitespaces))!){
+                txtFeet.text = String(feet)
+            }else{
+                txtFeet.text = ""
+            }
+            
+            if let inch = Int((txtInches.text?.trimmingCharacters(in: .whitespaces))!){
+                txtInches.text = String(inch)
+            }else{
+                txtInches.text = ""
+            }
+            
             if (Int(txtAge.text!) != nil) && (Int(txtWeight.text!) != nil || Float(txtWeight.text!) != nil) && (Int(txtFeet.text!) != nil){
                 if (Int(txtInches.text!) == nil) {
                     txtInches.text = "0"
@@ -188,6 +211,25 @@ class BmrViewController: UIViewController,UITextFieldDelegate {
                 //print("not intt lbsss")
             }
         }else{
+            
+            if let age = Int((txtAge.text?.trimmingCharacters(in: .whitespaces))!){
+                txtAge.text = String(age)
+            }else{
+                txtAge.text = ""
+            }
+            
+            if let weight = Int((txtWeight.text?.trimmingCharacters(in: .whitespaces))!){
+                txtWeight.text = String(weight)
+            }else{
+                txtWeight.text = ""
+            }
+            
+            if let height = Int((txtHeightCm.text?.trimmingCharacters(in: .whitespaces))!){
+                txtHeightCm.text = String(height)
+            }else{
+                txtHeightCm.text = ""
+            }
+            
             if (Int(txtAge.text!) != nil) && (Int(txtWeight.text!) != nil || Float(txtWeight.text!) != nil) && (Int(txtHeightCm.text!) != nil || Float(txtHeightCm.text!) != nil){
                 let dri = bmrCalculation()
                 if dri > 0{

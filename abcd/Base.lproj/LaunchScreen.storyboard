@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -18,19 +18,27 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="running copy" translatesAutoresizingMaskIntoConstraints="NO" id="yGB-lj-XG1">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="running1x" translatesAutoresizingMaskIntoConstraints="NO" id="yGB-lj-XG1">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="yGB-lj-XG1" secondAttribute="bottom" id="GmF-B5-p0s"/>
-                            <constraint firstItem="yGB-lj-XG1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="S4x-Yh-o0e"/>
-                            <constraint firstAttribute="trailing" secondItem="yGB-lj-XG1" secondAttribute="trailing" id="a4r-Rf-Sxp"/>
-                            <constraint firstItem="yGB-lj-XG1" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="dWi-Yh-y1o"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="yGB-lj-XG1" secondAttribute="bottom" id="GmF-B5-p0s">
+                                <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="yGB-lj-XG1" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="S4x-Yh-o0e">
+                                <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                            </constraint>
+                            <constraint firstAttribute="trailing" secondItem="yGB-lj-XG1" secondAttribute="trailing" id="a4r-Rf-Sxp">
+                                <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="yGB-lj-XG1" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="dWi-Yh-y1o">
+                                <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                            </constraint>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,6 +48,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="running copy" width="1024" height="1024"/>
+        <image name="running1x" width="745" height="400"/>
     </resources>
 </document>

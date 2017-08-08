@@ -379,9 +379,18 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
     
     @IBAction func btnSave(_ sender: Any) {
         if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
-            if (Int(txtHour.text!) == nil){
+            
+            if let test = Int((txtHour.text?.trimmingCharacters(in: .whitespaces))!){
+                print("test", test)
+                txtHour.text = String(test)
+            }else{
+                print("null")
                 txtHour.text = "0"
             }
+            
+            //if (Int(txtHour.text!) == nil){
+              //  txtHour.text = "0"
+            //}
             
             if let hour = Int(txtHour.text!){
                 if hour >= 0 && hour < 4{
@@ -397,10 +406,11 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         }
                     }
                     
-                    if let minute = Int(txtMinute.text!){
+                    if let minute = Int((txtMinute.text?.trimmingCharacters(in: .whitespaces))!){//Int(txtMinute.text!){
+                        txtMinute.text = String(minute)
                         if minute >= 0 && minute < 60{
                             var exerRep = Int()
-                            if let temp = Int(txtExerciseRep.text!){
+                            if let temp = Int((txtExerciseRep.text?.trimmingCharacters(in: .whitespaces))!){//Int(txtExerciseRep.text!){
                                 if temp >= 0 && temp < 100 {
                                     exerRep = temp
                                 }else{
@@ -481,6 +491,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         }
                     } else{
                         alertView(title: "ooops!", message: "add minute")
+                        txtMinute.text = ""
                     }
                 }else{
                     alertView(title: "ooops!", message: "add hour 1 - 3")
