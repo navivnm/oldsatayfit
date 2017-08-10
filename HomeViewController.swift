@@ -104,7 +104,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         do{
             dataArray = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
         }catch{
-            print(error)
+            //print(error)
         }
         
         for i in dataArray{
@@ -179,7 +179,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                         minuteArray.append(i.value(forKey: "minute") as! Int)
                     }
                 }catch{
-                    print(error)
+                    //print(error)
                 }
                 
                 let predicateTwo = NSPredicate(format: "((saveday >= %@) && (saveday <= %@)) && savemonth == %@ && saveyear == %@", "01", ddToday, mmToday, yyyyToday)
@@ -213,7 +213,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                             break
                         }
                 }catch{
-                    print(error)
+                    //print(error)
                 }
         }else{
         
@@ -252,7 +252,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                     break
                 }
             }catch{
-                print(error)
+                //print(error)
             }
         }
     }
@@ -381,10 +381,10 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
         if !(txtExerciseName.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             
             if let test = Int((txtHour.text?.trimmingCharacters(in: .whitespaces))!){
-                print("test", test)
+                //print("test", test)
                 txtHour.text = String(test)
             }else{
-                print("null")
+                //print("null")
                 txtHour.text = "0"
             }
             
@@ -484,7 +484,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate {
                                 txtHour.resignFirstResponder()
                                 txtMinute.resignFirstResponder()
                             }catch{
-                                print("save errorrr",error)
+                                //print("save errorrr",error)
                             }
                         } else{
                             alertView(title: "ooops!", message: "add minute 1-59")
@@ -582,7 +582,7 @@ extension HomeViewController: UITableViewDataSource{
                 loadDb()
                 callGraphData()
             }catch{
-                print("delete errpr",error)
+                //print("delete errpr",error)
             }
         }
     }
