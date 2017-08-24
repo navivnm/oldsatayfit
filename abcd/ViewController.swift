@@ -180,7 +180,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             
             num = Array(Set(num))
         }catch{
-            print(error)
+            //print(error)
         }
         startDate = ""
         calendar.reloadData()
@@ -203,7 +203,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         do {
             calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
         } catch {
-            print(error)
+            //print(error)
         }
         
         for i in calenderDate{
@@ -245,7 +245,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
             do {
                 calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
             } catch {
-                print(error)
+                //print(error)
             }
              
             for i in calenderDate{
@@ -413,7 +413,7 @@ class ViewController: UIViewController,FSCalendarDataSource,FSCalendarDelegate {
         do {
             calenderDate = try managedObjectContext?.fetch(fetchRequest) as! [NSManagedObject]
         } catch {
-            print(error)
+            //print(error)
         }
         
         for i in calenderDate{
@@ -517,7 +517,7 @@ extension ViewController: UITableViewDataSource{
                 nameArray = []
                 loadDb()
             }catch{
-                print(error)
+                //print(error)
             }
         }
     }
